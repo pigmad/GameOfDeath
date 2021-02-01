@@ -1,49 +1,54 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
     <head>
         <!-- Required meta tags -->
         <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, viewport-fit=cover">
 
         <!-- Bootstrap CSS -->
-        <link rel="stylesheet" href="assets/css/bootstrap.css">
-        <link rel="stylesheet" href="assets/css/style.css">
+        <link rel="stylesheet" href="assets/css/bootstrap.css">        
 
         <!-- Bootstrap JS -->
         <script type="text/javascript" src="assets/js/jquery-3.5.1.min.js"></script>
         <script type="text/javascript" src="assets/js/bootstrap.bundle.js"></script>
+        
+        <!-- Site CSS -->
+        <link rel="stylesheet" href="assets/css/style.css">
+        <!-- Site JS -->
+        <script type="text/javascript" src="assets/js/rendering.js"></script>
+        <script type="text/javascript" src="assets/js/coreGame.js"></script>
 
         <title>Game of death</title>
     </head>
     <body>
-        <!-- Image and text -->
-        <nav class="navbar navbar-light" style="background-color:#2b4ff0">
+        <!-- Navbar with actions -->
+        <nav class="navbar navbar-expand-sm navbar-light" style="background-color:#2b4ff0">
             <div class="container-fluid">
                 <a class="navbar-brand">
-                    <img class="logo" src="assets/img/eukaryotic-cells-48.png" class="d-inline-block logo">
+                    <img class="logo" src="assets/img/eukaryotic-cells-48.png" class="d-inline-block logo"/>
                     Eliminez les cellules !
                 </a>
                 <div class="d-flex flex-row-reverse">
                     <div class="nav-item">
-                        <img src="assets/img/bait-48.png" class="d-inline-block align-top logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Attirez la cellule avec un appât">
+                        <img src="assets/img/bait-48.png" class="d-inline-block align-top logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Attirez la cellule avec un appât"/>
                     </div>
                     <div class="nav-item">
-                        <img src="assets/img/ice-48.png" class="d-inline-block align-top logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ralentissez la progression de la cellule avec de la glace">
+                        <img src="assets/img/ice-48.png" class="d-inline-block align-top logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ralentissez la progression de la cellule avec de la glace"/>
                     </div>
                     <div class="nav-item">
-                        <img src="assets/img/fire-48.png" class="d-inline-block align-top logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Bloquez la progression de la cellule avec du feu">
+                        <img src="assets/img/fire-48.png" class="d-inline-block align-top logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Bloquez la progression de la cellule avec du feu"/>
                     </div>
                     <div class="nav-item">
-                        <img src="assets/img/bomb-48.png" class="d-inline-block align-top logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Posez une bombe qui explosera au prochain mouvement">
+                        <img src="assets/img/bomb-48.png" class="d-inline-block align-top logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Posez une bombe qui explosera au prochain mouvement"/>
                     </div>
                 </div>
             </div>
         </nav>
-        <div class="container">
-            <div>
-                <canvas id="canvas"></canvas>
-            </div>
+        <!-- drawing canvas -->
+        <div class="canvas-container">
+            <canvas id="canvas"></canvas>
         </div>
+        <!-- Footer with github link and how to play modal window-->
         <footer class="bd-footer bg-light text-center text-sm-start">
             <div class="container">
                 <ul class="bd-footer-links ps-0 mb-2">
