@@ -1,17 +1,17 @@
 //nombre maximum d'espèces dans le monde
 SPECIESNUMBER = 3;
 //nombre de situtation perÃ§ue par une cellule en fonction de son voisinage 
-//4 cellules voisines aux cardinaux (N,S,E,O) * 3 valeur de cellules possible (0 = rien, 1 = mÃªme espèce, 2 = espèce différente)
+//4 cellules voisines aux cardinaux (N,S,E,O) * 3 valeur de cellules possible (0 = rien, 1 = même espèce, 2 = espèce différente)
 // = 3^4 = 81)
 MAXSITUATIONS = 81;
 //nombre maximum d'actions qu'une cellule peut faire, les codes associés sont définis ci-dessous
 ACTIONSNUMBER = 4;
 
 //ACTION CODES
-NORTH = 1 //créer une cellule au nord
-SOUTH = 2 //créer une cellule au nord
-WEST = 3 //créer une cellule au nord
-EAST = 4 //créer une cellule au nord
+NORTH = 1; //créer une cellule au nord
+SOUTH = 2; //créer une cellule au nord
+WEST = 3; //créer une cellule au nord
+EAST = 4; //créer une cellule au nord
 
 
 class Species {
@@ -25,7 +25,7 @@ class Species {
         var mutatedGenome = JSON.parse(JSON.stringify(this.actionsArray));
         var mutationNumber = 2 + Math.floor(Math.random() * MAXSITUATIONS);
         for (var i = 0; i < mutationNumber; i++) {
-            mutatedGene = 1 + Math.floor(Math.random() * MAXSITUATIONS);
+            var mutatedGene = 1 + Math.floor(Math.random() * MAXSITUATIONS);
             mutatedGenome[mutatedGene] = 1 + Math.floor(Math.random() * MAXSITUATIONS);
         }
         return mutatedGenome;
@@ -41,8 +41,6 @@ class Species {
     }
 
     static getSituation(selectedSpecies, x, y, board) {
-        //console.log(board);
-
         function encodeSituation(selectedSpecies, cellValue) {
             if (cellValue === -1) {
                 return 0;
@@ -80,8 +78,8 @@ class World {
             this.board[x][y] = cellValue;
         } else {
             var species = world.speciesArray[cellValue];
-            var mutatedActionArray = species.mutateGenome;
-            var mutatedColor = species.mutateColor;
+            var mutatedActionArray = species.mutateGenome();
+            var mutatedColor = species.mutateColor();
             var mutatedCell = new Species(mutatedActionArray, true, mutatedColor);
             this.speciesArray.push(mutatedCell);
             this.board[x][y] = this.speciesArray.length - 1;
@@ -110,7 +108,7 @@ function initWorld() {
     var yMax = cvs.height / STEP;
     var board = [];
     var cycle = 0;
-    var pMut = 0;
+    var pMut = 0.5;
     var pCreate = 0.05;
     var species = initSpecies();
     for (var x = 0; x < xMax; x++) {
@@ -131,7 +129,7 @@ function initWorld() {
 
 }
 
-function worldStep() {
+async function worldStep() {
     world.cycle++;
     //copie par valeur du plateau de jeu qui sert de référence
     var boardCopy = JSON.parse(JSON.stringify(world.board));
@@ -139,7 +137,6 @@ function worldStep() {
     for (var x = 0; x < world.xMax; x++) {
         for (var y = 0; y < world.yMax; y++) {
             var cellValue = boardCopy[x][y];
-            //console.log(cellValue);
             if (cellValue >= 0) {
                 var situation = Species.getSituation(cellValue, x, y, boardCopy);
                 var action = world.speciesArray[cellValue].actionsArray[situation];
@@ -178,9 +175,23 @@ function checkAliveSpecies() {
     }
 }
 
+
+/* ***** MAIN ***** */
+
+// boucle autoplay
+var timer;
+
+//initialisation du plateau de jeu
 initWorld();
 
-//while (true) {
-//    worldStep();
-//    
-//}
+//fonction start/stop autoplay
+$("#start").click(function() {
+  if (timer === undefined) {
+    timer = setInterval(worldStep, 500);
+    $(this).text("Stop");
+  } else {
+    clearInterval(timer);
+    timer = undefined;
+    $(this).text("Start");
+  }
+});
