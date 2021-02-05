@@ -41,7 +41,7 @@ class Species {
     }
 
     static getSituation(selectedSpecies, x, y, board) {
-        console.log(board);
+        //console.log(board);
 
         function encodeSituation(selectedSpecies, cellValue) {
             if (cellValue === -1) {
@@ -56,9 +56,9 @@ class Species {
         }
 
         var neigh = [];
-        neigh.push(encodeSituation(selectedSpecies, board[(x - 1) % world.xMax][y]));
+        neigh.push(encodeSituation(selectedSpecies, board[(x - 1 + world.xMax) % world.xMax][y]));
         neigh.push(encodeSituation(selectedSpecies, board[(x + 1) % world.xMax][y]));
-        neigh.push(encodeSituation(selectedSpecies, board[x][(y - 1) % world.yMax]));
+        neigh.push(encodeSituation(selectedSpecies, board[x][(y - 1 + world.yMax) % world.yMax]));
         neigh.push(encodeSituation(selectedSpecies, board[x][(y + 1) % world.yMax]));
         return 1 + neigh[0] + 3 * neigh[1] + 9 * neigh[2] + 27 * neigh[3];
     }
@@ -110,7 +110,7 @@ function initWorld() {
     var yMax = cvs.height / STEP;
     var board = [];
     var cycle = 0;
-    var pMut = 1;
+    var pMut = 0;
     var pCreate = 0.05;
     var species = initSpecies();
     for (var x = 0; x < xMax; x++) {
@@ -141,18 +141,17 @@ function worldStep() {
             var cellValue = boardCopy[x][y];
             //console.log(cellValue);
             if (cellValue >= 0) {
-                console.log(boardCopy);
                 var situation = Species.getSituation(cellValue, x, y, boardCopy);
                 var action = world.speciesArray[cellValue].actionsArray[situation];
                 switch (action) {
                     case NORTH :
-                        world.cellAction(x, (y - 1) % world.yMax, cellValue);
+                        world.cellAction(x, (y - 1 + world.yMax) % world.yMax, cellValue);
                         break;
                     case SOUTH:
                         world.cellAction(x, (y + 1) % world.yMax, cellValue);
-                        break;
+//                        break;
                     case WEST:
-                        world.cellAction((x + 1) % world.xMax, y, cellValue);
+                        world.cellAction((x - 1 + world.xMax) % world.xMax, y, cellValue);
                         break;
                     case EAST:
                         world.cellAction((x + 1) % world.xMax, y, cellValue);
@@ -180,8 +179,8 @@ function checkAliveSpecies() {
 }
 
 initWorld();
-console.log(world);
 
 //while (true) {
 //    worldStep();
+//    
 //}

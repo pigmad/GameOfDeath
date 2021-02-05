@@ -1,7 +1,7 @@
 function init() {
     window.cvs = document.getElementById("canvas");
     window.ctx = cvs.getContext("2d");
-    window.STEP = 20;
+    window.STEP = 15;
     //window.onresize = resizeCanvas(cvs);
     resizeCanvas();
     drawGrid();
