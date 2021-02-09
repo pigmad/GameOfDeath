@@ -32,7 +32,7 @@ function getMousePosition(evt) {
 }
 
 function drawHoverImage(evt){
-    drawWorld(world);
+    drawUserActions();
     if (selectedImageCode) {
         var mousePos = getMousePosition(evt);
         var image = new Image();
@@ -51,12 +51,12 @@ function addUserAction(evt) {
             console.log("set " + selectedImageCode);
             world.player.actionBoard[mousePos.xCell][mousePos.yCell] = selectedImageCode;
         }
-        drawWorld(world);
         drawUserActions();
     }
 }
 
 function drawUserActions() {
+    drawWorld(world);
     for (var x = 0; x < world.xMax; x++) {
         for (var y = 0; y < world.yMax; y++) {
             var image = new Image();
