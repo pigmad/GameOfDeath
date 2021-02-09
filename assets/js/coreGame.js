@@ -7,16 +7,23 @@ MAXSITUATIONS = 81;
 //nombre maximum d'actions qu'une cellule peut faire, les codes associés sont définis ci-dessous
 ACTIONSNUMBER = 5;
 
-//ACTION CODES
+//CELLS ACTION CODES
 NOPE = 1; //rien
 NORTH = 2; //créer une cellule au nord
 SOUTH = 3; //créer une cellule au sud
 WEST = 4; //créer une cellule à l'ouest
 EAST = 5; //créer une cellule à l'est
 
+//USER ACTION CODES
+BOMB = -3;
+FIRE = -4;
+ICE = -5;
+BAIT = -6;
+
 class Player {
-    constructor(energy) {
+    constructor(energy, actionBoard) {
         this.energy = energy;
+        this.actionBoard = actionBoard;
     }
 }
 
@@ -48,7 +55,7 @@ class Species {
 }
 
 class World {
-    constructor(xMax, yMax, board, cycle, speciesArray, maxSpecies, pMut) {
+    constructor(xMax, yMax, board, cycle, speciesArray, maxSpecies, pMut, player) {
         this.xMax = xMax;
         this.yMax = yMax;
         this.board = board;
@@ -56,6 +63,7 @@ class World {
         this.speciesArray = speciesArray;
         this.maxSpecies = maxSpecies;
         this.pMut = pMut;
+        this.player = player;
     }
 
     getSituation(selectedSpecies, x, y, board) {
@@ -80,19 +88,23 @@ class World {
     }
 
     cellActionNoMut(x, y, cellValue, board) {
-        if (board[x][y] !== -1) {
+        if (board[x][y] !== -1 && board[x][y] !== cellValue) {
             board[x][y] = -2;
         } else {
             board[x][y] = cellValue;
+            world.player.energy++;
+            console.log(world.player.energy);
         }
     }
 
     cellActionMut(x, y, cellValue, board) {
-        if (board[x][y] !== -1) {
+        if (board[x][y] !== -1 && board[x][y] !== cellValue) {
             board[x][y] = -2;
         } else {
             if (Math.random() > this.pMut) {
                 board[x][y] = cellValue;
+                world.player.energy++;
+                console.log(world.player.energy);
             } else {
                 var species = world.speciesArray[cellValue];
                 var mutatedActionArray = species.mutateGenome();
@@ -104,6 +116,8 @@ class World {
                 board[(x + 1) % world.xMax][y] = this.speciesArray.length - 1;
                 board[x][(y - 1 + world.yMax) % world.yMax] = this.speciesArray.length - 1;
                 board[x][(y + 1) % world.yMax] = this.speciesArray.length - 1;
+                world.player.energy++;
+                console.log(world.player.energy);
             }
         }
     }
@@ -125,8 +139,16 @@ function initSpecies() {
     return species;
 }
 
-function initPlayer() {
-
+function initPlayer(xMax, yMax) {
+    var actionBoard = [];
+    for (var x = 0; x < xMax; x++) {
+        var line = [];
+        for (var y = 0; y < yMax; y++) {
+            line.push(0);
+        }
+        actionBoard.push(line);
+    }
+    return new Player(0, actionBoard);
 }
 
 function initWorld() {
@@ -134,9 +156,10 @@ function initWorld() {
     var yMax = cvs.height / STEP;
     var board = [];
     var cycle = 0;
-    var pMut = 0.0003;
+    var pMut = 0.0005;
     var pCreate = 0.05;
     var species = initSpecies();
+    var player = initPlayer(xMax, yMax);
     for (var x = 0; x < xMax; x++) {
         var line = [];
         for (var y = 0; y < yMax; y++) {
@@ -149,7 +172,7 @@ function initWorld() {
         }
         board.push(line);
     }
-    var world = new World(xMax, yMax, board, cycle, species, SPECIESNUMBER, pMut);
+    var world = new World(xMax, yMax, board, cycle, species, SPECIESNUMBER, pMut, player);
     drawWorld(world);
     setDropDownAliveSpecies(world);
     return world;
@@ -248,18 +271,6 @@ function deleteDeadSpecies() {
     world.speciesArray = speciesAlive;
 }
 
-function setDropDownAliveSpecies(world) {
-    var dropdown = document.getElementById("dropdownSpecies");
-    //resetContent
-    dropdown.innerHTML = "";
-    for (var i = 0; i < world.speciesArray.length; i++) {
-        var color = world.speciesArray[i].color;
-        var colorString = "rgb(" + color[0] + "," + color[1] + "," + color[2] + ")";
-        var item = "<li><a class='dropdown-item'>Espèce " + (i + 1) + "<div class='color-square' style='background-color:" + colorString + "'></div>" + "</a></li>";
-        dropdown.innerHTML += item;
-    }
-}
-
 /* ***** MAIN ***** */
 
 // boucle autoplay
@@ -268,15 +279,15 @@ autoplay = false;
 //initialisation du plateau de jeu
 world = initWorld();
 
-function startStop() {
+function toggleAutoplay() {
     var button = document.getElementById("start");
     if (!autoplay) {
-        button.textContent = "Stop";
+        button.value = "Stop";
+        resetImagesBorder();
         autoplay = setInterval(worldStep, 200);
-
     } else {
+        button.value = "Jouer";
         clearInterval(autoplay);
         autoplay = false;
-        button.textContent = "Jouer";
     }
 }

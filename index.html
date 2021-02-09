@@ -32,40 +32,41 @@
             <a class="navbar-brand">
                 Eliminez les cellules !
             </a>
-
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <button type="button" class="btn btn-outline-secondary" id="start" onclick="startStop(this);">Jouer</button>
+                        <input id="start" class="btn btn-outline-light" type="button" value="Jouer" onclick="toggleAutoplay();">
                     </li>
                     <li class="nav-item dropdown">
                         <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Espèces en vie
                         </a>
-                        <ul id="dropdownSpecies" class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <ul id="dropdownSpecies" class="dropdown-menu scrollable-dropdown" aria-labelledby="navbarDropdown">
                         </ul>
                     </li>
+                    <li class="nav-item progess-nav">
+                        <div class="progress">
+                            <div class="progress-bar progress-bar-striped bg-info" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+                    </li>
+                    <li class="nav-item">
+                        <input id="bombImage" type="image" src="assets/img/bomb-48.png" class="d-inline-block align-top logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Posez une bombe qui explosera au prochain mouvement" onclick="selectImage(this);"/>
+                    </li>
+                    <li class="nav-item">
+                        <input id="fireImage" type="image" src="assets/img/fire-48.png" class="d-inline-block align-top logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Bloquez la progression de la cellule avec du feu" onclick="selectImage(this);"/>
+                    </li>
+                    <li class="nav-item">
+                        <input id="iceImage" type="image" src="assets/img/ice-48.png" class="d-inline-block align-top logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ralentissez la progression de la cellule avec de la glace" onclick="selectImage(this);"/>
+                    </li>
+                    <li class="nav-item">
+                        <input id="baitImage" type="image" src="assets/img/bait-48.png" class="d-inline-block align-top logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Attirez la cellule avec un appât" onclick="selectImage(this);"/>
+                    </li>
                 </ul>
-            </div>
-            <ul class="navbar-nav d-flex flex-row-reverse">
-                <li class="nav-item">
-                    <img src="assets/img/bait-48.png" class="d-inline-block align-top logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Attirez la cellule avec un appât"/>
-                </li>
-                <li class="nav-item">
-                    <img src="assets/img/ice-48.png" class="d-inline-block align-top logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ralentissez la progression de la cellule avec de la glace"/>
-                </li>
-                <li class="nav-item">
-                    <img src="assets/img/fire-48.png" class="d-inline-block align-top logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Bloquez la progression de la cellule avec du feu"/>
-                </li>
-                <li class="nav-item">
-                    <img src="assets/img/bomb-48.png" class="d-inline-block align-top logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Posez une bombe qui explosera au prochain mouvement"/>
-                </li>
-            </ul>
         </nav>
-        <!-- drawing canvas -->
+        <!-- Drawing canvas -->
         <div class="canvas-container">
             <canvas id="canvas"></canvas>
         </div>
@@ -91,7 +92,7 @@
                     </li>
                 </ul>
                 <p class="mb-0">Projet libre de dernière année à Polytech Tours</p>
-                <p class="mb-0">Réalisé par Defienas Colin et Lastennet Dorian</p>
+                <p class="mb-0">Réalisé par Lastennet Dorian et Defienas Colin</p>
             </div>
         </footer>
     </body>
