@@ -20,6 +20,7 @@ FIRE = -4;
 ICE = -5;
 BAIT = -6;
 
+//classe représentant le joueur avec une jauge d'énergie et un tableau d'actions avec une bombe, du feu
 class Player {
     constructor(energy, actionBoard) {
         this.energy = energy;
@@ -27,6 +28,7 @@ class Player {
     }
 }
 
+//classe représentant une espèce avec un tableau d'actions, un booléen pour savoir si elle est en vie et une couleur
 class Species {
     constructor(actionsArray, alive, color) {
         this.actionsArray = actionsArray;
@@ -176,6 +178,7 @@ function initWorld() {
 }
 
 function worldStep() {
+    // boucler sur le tableau du joueur pour faire effet des bombes puis init le plateau du joueur
     world.cycle++;
     //création matrice vide
     var emptyBoard = [];

@@ -56,9 +56,14 @@
                     <input id="baitImage" type="image" src="assets/img/bait-48.png" class="logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Attirez la cellule avec un appât" onclick="selectImage(this);"/>
                 </li>
             </ul>
-            <div class="progress" style="width: 40em">
-                <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
+            <ul class="nav flex-column">
+                <div class="text-center">
+                <p class="text-white" >Barre d'énergie</p>
+                </div>
+                <div class="progress" style="width: 40em">
+                    <div id="barre" class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </ul>
         </nav>
         <!-- Drawing canvas -->
         <div class="canvas-container">
