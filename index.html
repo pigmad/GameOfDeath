@@ -32,34 +32,30 @@
             <a class="navbar-brand">
                 Eliminez les cellules !
             </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav justify-content-center">
-                    <li class="nav-item">
-                        <input id="start" class="btn btn-outline-light" type="button" value="Jouer" onclick="toggleAutoplay();">
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Espèces en vie
-                        </a>
-                        <ul id="dropdownSpecies" class="dropdown-menu scrollable-dropdown" aria-labelledby="navbarDropdown">
-                        </ul>
-                    </li>
-                    <li class="nav-item">
-                        <input id="bombImage" type="image" src="assets/img/bomb-48.png" class="d-inline-block align-top logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Posez une bombe qui explosera au prochain mouvement" onclick="selectImage(this);"/>
-                    </li>
-                    <li class="nav-item">
-                        <input id="fireImage" type="image" src="assets/img/fire-48.png" class="d-inline-block align-top logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Bloquez la progression de la cellule avec du feu" onclick="selectImage(this);"/>
-                    </li>
-                    <li class="nav-item">
-                        <input id="iceImage" type="image" src="assets/img/ice-48.png" class="d-inline-block align-top logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ralentissez la progression de la cellule avec de la glace" onclick="selectImage(this);"/>
-                    </li>
-                    <li class="nav-item">
-                        <input id="baitImage" type="image" src="assets/img/bait-48.png" class="d-inline-block align-top logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Attirez la cellule avec un appât" onclick="selectImage(this);"/>
-                    </li>
-                </ul>
+            <ul class="navbar-nav justify-content-center">
+                <li class="nav-item">
+                    <input id="start" class="btn btn-outline-light" style="margin-top:10px" type="button" value="Jouer" onclick="toggleAutoplay();">
+                </li>
+                <li class="nav-item dropdown">
+                    <a id="navbarDropdown" class="nav-link dropdown-toggle" style="margin-top:10px" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Espèces en vie
+                    </a>
+                    <ul id="dropdownSpecies" class="dropdown-menu scrollable-dropdown" aria-labelledby="navbarDropdown">
+                    </ul>
+                </li>
+                <li class="nav-item">
+                    <input id="bombImage" type="image" src="assets/img/bomb-48.png" class="logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Posez une bombe qui explosera au prochain mouvement" onclick="selectImage(this);"/>
+                </li>
+                <li class="nav-item">
+                    <input id="fireImage" type="image" src="assets/img/fire-48.png" class="logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Bloquez la progression de la cellule avec du feu" onclick="selectImage(this);"/>
+                </li>
+                <li class="nav-item">
+                    <input id="iceImage" type="image" src="assets/img/ice-48.png" class="logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Ralentissez la progression de la cellule avec de la glace" onclick="selectImage(this);"/>
+                </li>
+                <li class="nav-item">
+                    <input id="baitImage" type="image" src="assets/img/bait-48.png" class="logo" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Attirez la cellule avec un appât" onclick="selectImage(this);"/>
+                </li>
+            </ul>
         </nav>
         <!-- Drawing canvas -->
         <div class="canvas-container">
