@@ -9,7 +9,7 @@ function init() {
     cvs.addEventListener('click', function (evt) {
         addUserAction(evt);
     });
-    //window.onresize = resizeCanvas(cvs);
+    //window.onresize = resizeCanvas;
     resizeCanvas();
     drawGrid();
 }
@@ -45,10 +45,8 @@ function addUserAction(evt) {
     if (selectedImageCode) {
         var mousePos = getMousePosition(evt);
         if (world.player.actionBoard[mousePos.xCell][mousePos.yCell] === selectedImageCode) {
-            console.log("reset");
             world.player.actionBoard[mousePos.xCell][mousePos.yCell] = 0;
         } else {
-            console.log("set " + selectedImageCode);
             world.player.actionBoard[mousePos.xCell][mousePos.yCell] = selectedImageCode;
         }
         drawUserActions();
@@ -72,11 +70,11 @@ function drawGrid() {
     var h = cvs.height;
     ctx.strokeStyle = 'rgb(0,0,0)';
     ctx.lineWidth = 1;
-    for (var x = STEP; x <= w - STEP; x += STEP) {
+    for (var x = 0; x <= w; x += STEP) {
         ctx.moveTo(x, 0);
         ctx.lineTo(x, h);
     }
-    for (var y = STEP; y <= h - STEP; y += STEP) {
+    for (var y = 0; y <= h; y += STEP) {
         ctx.moveTo(0, y);
         ctx.lineTo(w, y);
     }
@@ -126,10 +124,16 @@ function resetImagesBorder() {
 }
 
 function selectImage(selectedImage) {
-    resetImagesBorder();
-    selectedImage.style.border = "2px white solid";
-    selectedImage.style.borderRadius = "4px";
-    window.selectedImageCode = getSelectedImageCode(selectedImage);
+    var selectedImageCode = getSelectedImageCode(selectedImage);
+    if (window.selectedImageCode == selectedImageCode){
+        resetImagesBorder();
+    }
+    else{
+        resetImagesBorder();
+        selectedImage.style.border = "2px white solid";
+        selectedImage.style.borderRadius = "4px";
+        window.selectedImageCode = selectedImageCode;
+    }
     if (autoplay) {
         toggleAutoplay();
     }

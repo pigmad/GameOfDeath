@@ -93,7 +93,6 @@ class World {
         } else {
             board[x][y] = cellValue;
             world.player.energy++;
-            console.log(world.player.energy);
         }
     }
 
@@ -104,7 +103,6 @@ class World {
             if (Math.random() > this.pMut) {
                 board[x][y] = cellValue;
                 world.player.energy++;
-                console.log(world.player.energy);
             } else {
                 var species = world.speciesArray[cellValue];
                 var mutatedActionArray = species.mutateGenome();
@@ -117,7 +115,6 @@ class World {
                 board[x][(y - 1 + world.yMax) % world.yMax] = this.speciesArray.length - 1;
                 board[x][(y + 1) % world.yMax] = this.speciesArray.length - 1;
                 world.player.energy++;
-                console.log(world.player.energy);
             }
         }
     }
@@ -273,7 +270,7 @@ function deleteDeadSpecies() {
 
 /* ***** MAIN ***** */
 
-// boucle autoplay
+//boucle autoplay
 autoplay = false;
 
 //initialisation du plateau de jeu
@@ -284,7 +281,7 @@ function toggleAutoplay() {
     if (!autoplay) {
         button.value = "Stop";
         resetImagesBorder();
-        autoplay = setInterval(worldStep, 200);
+        autoplay = setInterval(worldStep, 300);
     } else {
         button.value = "Jouer";
         clearInterval(autoplay);
