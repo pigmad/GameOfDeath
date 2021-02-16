@@ -19,6 +19,7 @@ function resizeCanvas() {
     cvs.height = cvs.offsetHeight - (cvs.offsetHeight % STEP);
 }
 
+//fonction qui retourne les coordonnées de la case de la position de la souris de l'utilisateur sur le plateau
 function getMousePosition(evt) {
     var rect = cvs.getBoundingClientRect(),
             scaleX = cvs.width / rect.width,
@@ -31,9 +32,12 @@ function getMousePosition(evt) {
     };
 }
 
+//fonction qui affiche un objet sur le plateau en fonction de la position de la souris de l'utilisateur
 function drawHoverImage(evt){
     drawUserActions();
+    // si un objet (bombe, feu, ...) est sélectionné
     if (selectedImageCode) {
+        //position de la souris de l'utilisateur sur le plateau
         var mousePos = getMousePosition(evt);
         var image = new Image();
         image.src = getSelectedImageSrc(window.selectedImageCode);
@@ -42,8 +46,10 @@ function drawHoverImage(evt){
 }
 
 function addUserAction(evt) {
+    // si un objet (bombe, feu, ...) est sélectionné
     if (selectedImageCode) {
         var mousePos = getMousePosition(evt);
+        //si l'utilisateur clique sur un objet qui est déjà sur le plateau alors il disparait
         if (world.player.actionBoard[mousePos.xCell][mousePos.yCell] === selectedImageCode) {
             world.player.actionBoard[mousePos.xCell][mousePos.yCell] = 0;
         } else {
@@ -53,6 +59,7 @@ function addUserAction(evt) {
     }
 }
 
+//fonction qui dessine les objets (bombe, feu, ...) dans le plateau
 function drawUserActions() {
     drawWorld(world);
     for (var x = 0; x < world.xMax; x++) {
@@ -68,12 +75,16 @@ function drawGrid() {
     ctx.beginPath();
     var w = cvs.width;
     var h = cvs.height;
+    // couleur noire pour les lignes autour des carrés de la grille
     ctx.strokeStyle = 'rgb(0,0,0)';
+    //largeur des lignes
     ctx.lineWidth = 1;
+    //tracé des lignes verticales
     for (var x = 0; x <= w; x += STEP) {
         ctx.moveTo(x, 0);
         ctx.lineTo(x, h);
     }
+    //tracé des lignes horizontales
     for (var y = 0; y <= h; y += STEP) {
         ctx.moveTo(0, y);
         ctx.lineTo(w, y);
@@ -82,10 +93,12 @@ function drawGrid() {
 }
 
 function drawWorld(world) {
+    //tracé de la grille
     drawGrid();
     for (var x = 0; x < world.xMax; x++) {
         for (var y = 0; y < world.yMax; y++) {
             var cellValue = world.board[x][y];
+            //si pas de cellule, colorer la case en blanc
             if (cellValue === -1) {
                 ctx.fillStyle = 'white';
                 ctx.fillRect(x * STEP + 1, y * STEP + 1, STEP - 2, STEP - 2);
@@ -98,6 +111,7 @@ function drawWorld(world) {
     }
 }
 
+// fonction pour remplir la combobox des espèces en vie
 function setDropDownAliveSpecies(world) {
     var dropdown = document.getElementById("dropdownSpecies");
     //resetContent
@@ -110,11 +124,13 @@ function setDropDownAliveSpecies(world) {
     }
 }
 
+//fonction qui enlève les bordures d'une image
 function resetBorder(image) {
     image.style.border = "";
     image.style.borderRadius = "";
 }
 
+//fonction qui enlève les bordures des images des objets
 function resetImagesBorder() {
     resetBorder(document.getElementById("baitImage"));
     resetBorder(document.getElementById("iceImage"));
@@ -123,11 +139,13 @@ function resetImagesBorder() {
     window.selectedImageCode = 0;
 }
 
+//fonction qui efectue les actions sur les images des objets (bombe, feu, glace, appat) de la navbar
 function selectImage(selectedImage) {
     var selectedImageCode = getSelectedImageCode(selectedImage);
     if (window.selectedImageCode == selectedImageCode){
         resetImagesBorder();
     }
+    //cas où l'utilisateur clique sur une image (cela ajoute un cadre autour)
     else{
         resetImagesBorder();
         selectedImage.style.border = "2px white solid";
@@ -139,6 +157,7 @@ function selectImage(selectedImage) {
     }
 }
 
+//fonction qui retourne le code d'un objet en fonction du chemin de l'image
 function getSelectedImageCode(selectedImage) {
     if (selectedImage.src.includes("bomb")) {
         return BOMB;
@@ -155,6 +174,7 @@ function getSelectedImageCode(selectedImage) {
     return 0;
 }
 
+//fonction qui renvoie le chemin de l'image en fonction du code
 function getSelectedImageSrc(selectedImageCode) {
     if (selectedImageCode === BOMB) {
         return "assets/img/bomb-48.png";

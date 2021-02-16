@@ -56,6 +56,7 @@ class Species {
     }
 }
 
+//classe représentant le monde avec sa taille, son tableau des espèces, le nombre d'espèces au maximum, la probabilité de mutation des cellules, le joueur
 class World {
     constructor(xMax, yMax, board, cycle, speciesArray, maxSpecies, pMut, player) {
         this.xMax = xMax;
@@ -68,49 +69,69 @@ class World {
         this.player = player;
     }
 
+    //calcul de la situation de l'espèce cellValue aux coordonnées (x,y)
     getSituation(selectedSpecies, x, y, board) {
         function encodeSituation(selectedSpecies, cellValue) {
+            //case vide
             if (cellValue === -1) {
                 return 0;
             } else {
+                // case occupée par une cellule d'une autre espèce
                 if (selectedSpecies !== cellValue) {
                     return 2;
-                } else {
+                }
+                //case occupée par une cellule de la même espèce 
+                else {
                     return 1;
                 }
             }
         }
 
         var neigh = [];
+        //calcul de la situation à l'ouest de la case considérée
         neigh.push(encodeSituation(selectedSpecies, board[(x - 1 + world.xMax) % world.xMax][y]));
+        //calcul de la situation à l'est de la case considérée
         neigh.push(encodeSituation(selectedSpecies, board[(x + 1) % world.xMax][y]));
+        //calcul de la situation au nord de la case considérée
         neigh.push(encodeSituation(selectedSpecies, board[x][(y - 1 + world.yMax) % world.yMax]));
+        //calcul de la situation au sud de la case considérée
         neigh.push(encodeSituation(selectedSpecies, board[x][(y + 1) % world.yMax]));
         return 1 + neigh[0] + 3 * neigh[1] + 9 * neigh[2] + 27 * neigh[3];
     }
 
     cellActionNoMut(x, y, cellValue, board) {
+        //si la case est occupée par une cellule d'une autre espèce alors la cellule est détruite
         if (board[x][y] !== -1 && board[x][y] !== cellValue) {
             board[x][y] = -2;
-        } else {
+        } 
+        //la cellule est créée aux coordonnées (x,y)
+        else {
             board[x][y] = cellValue;
             world.player.energy++;
         }
     }
 
+    //ajout d'une cellule cellValue aux coordonnées (x,y)
     cellActionMut(x, y, cellValue, board) {
+        //s'il y a déjà une cellule d'une autre espèce alors la cellule est détruite
         if (board[x][y] !== -1 && board[x][y] !== cellValue) {
             board[x][y] = -2;
         } else {
+            //cas où il n'y a pas de mutation
             if (Math.random() > this.pMut) {
                 board[x][y] = cellValue;
                 world.player.energy++;
-            } else {
+            } 
+            //cas où il y a une mutation
+            else {
                 var species = world.speciesArray[cellValue];
+                //calcul du tableau des actions de l'espèce mutée
                 var mutatedActionArray = species.mutateGenome();
+                //calcul de la couleur de l'espèce mutée
                 var mutatedColor = species.mutateColor();
                 var mutatedCell = new Species(mutatedActionArray, true, mutatedColor);
                 this.speciesArray.push(mutatedCell);
+                //création de cellules (ajout dans le tableau des cellules) de l'espèce mutée aux coordonnées (x,y) ainsi qu'aux 4 cases (nord, sud, est, ouest) adjacentes
                 board[x][y] = this.speciesArray.length - 1;
                 board[(x - 1 + world.xMax) % world.xMax][y] = this.speciesArray.length - 1;
                 board[(x + 1) % world.xMax][y] = this.speciesArray.length - 1;
@@ -163,7 +184,7 @@ function initWorld() {
         var line = [];
         for (var y = 0; y < yMax; y++) {
             if (Math.random() < pCreate) {
-                //la valeur d'une cellule 
+                //la valeur d'une cellule
                 line.push(Math.floor(Math.random() * SPECIESNUMBER));
             } else {
                 line.push(-1);
@@ -178,7 +199,6 @@ function initWorld() {
 }
 
 function worldStep() {
-    // boucler sur le tableau du joueur pour faire effet des bombes puis init le plateau du joueur
     world.cycle++;
     //création matrice vide
     var emptyBoard = [];
@@ -193,24 +213,30 @@ function worldStep() {
         for (var y = 0; y < world.yMax; y++) {
             var cellValue = world.board[x][y];
             if (cellValue >= 0) {
+                //calcul de la situation de l'espèce cellValue aux coordonnées (x,y)
                 var situation = world.getSituation(cellValue, x, y, world.board);
                 var action = world.speciesArray[cellValue].actionsArray[situation];
                 switch (action) {
+                    //cas où la cellule ne fait rien
                     case NOPE :
                         world.cellActionNoMut(x, y, cellValue, emptyBoard);
                         break;
+                    //cas où la cellule se multiplie vers le nord
                     case NORTH :
                         world.cellActionMut(x, (y - 1 + world.yMax) % world.yMax, cellValue, emptyBoard);
                         world.cellActionMut(x, y, cellValue, emptyBoard);
                         break;
+                    //cas où la cellule se multiplie vers le sud
                     case SOUTH:
                         world.cellActionMut(x, (y + 1) % world.yMax, cellValue, emptyBoard);
                         world.cellActionMut(x, y, cellValue, emptyBoard);
                         break;
+                    //cas où la cellule se multiplie vers l'ouest
                     case WEST:
                         world.cellActionMut((x - 1 + world.xMax) % world.xMax, y, cellValue, emptyBoard);
                         world.cellActionMut(x, y, cellValue, emptyBoard);
                         break;
+                    //cas où la cellule se multiplie vers l'est
                     case EAST:
                         world.cellActionMut((x + 1) % world.xMax, y, cellValue, emptyBoard);
                         world.cellActionMut(x, y, cellValue, emptyBoard);
@@ -235,6 +261,7 @@ function worldStep() {
     setDropDownAliveSpecies(world);
 }
 
+//fonction qui met à jour les espèces en vie selon l'occupation des cases du plateau
 function checkAliveSpecies() {
     for (var i = 0; i < world.speciesArray.length; i++) {
         world.speciesArray[i].alive = false;
@@ -272,7 +299,6 @@ function deleteDeadSpecies() {
 }
 
 /* ***** MAIN ***** */
-
 //boucle autoplay
 autoplay = false;
 
@@ -284,6 +310,7 @@ function toggleAutoplay() {
     if (!autoplay) {
         button.value = "Stop";
         resetImagesBorder();
+        //appel de la fonction worldstep toutes les 300 milisecondes
         autoplay = setInterval(worldStep, 300);
     } else {
         button.value = "Jouer";
