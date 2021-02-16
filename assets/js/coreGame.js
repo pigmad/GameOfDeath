@@ -20,6 +20,12 @@ FIRE = -4;
 ICE = -5;
 BAIT = -6;
 
+//énergie maximale
+ENERGY_MAX = 10000;
+
+//cout en énergie d'une bombe
+BOMB_COST = 2000;
+
 //classe représentant le joueur avec une jauge d'énergie et un tableau d'actions avec une bombe, du feu
 class Player {
     constructor(energy, actionBoard) {
@@ -107,7 +113,13 @@ class World {
         //la cellule est créée aux coordonnées (x,y)
         else {
             board[x][y] = cellValue;
-            world.player.energy++;
+            //si l'énergie du joueur est inférieure au maximum
+            if (world.player.energy < ENERGY_MAX)
+            {
+                world.player.energy++;
+                window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 0.01).toString());
+                window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
+            }
         }
     }
 
@@ -120,7 +132,13 @@ class World {
             //cas où il n'y a pas de mutation
             if (Math.random() > this.pMut) {
                 board[x][y] = cellValue;
-                world.player.energy++;
+                //si l'énergie du joueur est inférieure au maximum
+                if (world.player.energy < ENERGY_MAX)
+                {
+                    world.player.energy++;
+                    window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 0.01).toString());
+                    window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
+                }
             } 
             //cas où il y a une mutation
             else {
@@ -137,7 +155,13 @@ class World {
                 board[(x + 1) % world.xMax][y] = this.speciesArray.length - 1;
                 board[x][(y - 1 + world.yMax) % world.yMax] = this.speciesArray.length - 1;
                 board[x][(y + 1) % world.yMax] = this.speciesArray.length - 1;
-                world.player.energy++;
+                //si l'énergie du joueur est inférieure au maximum
+                if (world.player.energy < ENERGY_MAX)
+                {
+                    world.player.energy++;
+                    window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 0.01).toString());
+                    window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
+                }
             }
         }
     }
@@ -209,6 +233,10 @@ function worldStep() {
                 world.board[(x + 1) % world.xMax][y] = -1;
                 world.board[x][(y - 1 + world.yMax) % world.yMax] = -1;
                 world.board[x][(y + 1) % world.yMax] = -1;
+                //baisse de l'énergie
+                world.player.energy = world.player.energy - BOMB_COST;
+                window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) - 20).toString());
+                window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
             }
         }
     }
