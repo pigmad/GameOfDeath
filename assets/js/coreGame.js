@@ -199,6 +199,30 @@ function initWorld() {
 }
 
 function worldStep() {
+    // boucler sur le tableau du joueur pour faire effet des bombes puis init le plateau du joueur
+    for (var x = 0; x < world.xMax; x++) {
+        for (var y = 0; y < world.yMax; y++) {
+            if (world.player.actionBoard[x][y] == -3) {
+                //destruction de 5 cellules
+                world.board[x][y] = -1;
+                world.board[(x - 1 + world.xMax) % world.xMax][y] = -1;
+                world.board[(x + 1) % world.xMax][y] = -1;
+                world.board[x][(y - 1 + world.yMax) % world.yMax] = -1;
+                world.board[x][(y + 1) % world.yMax] = -1;
+            }
+        }
+    }
+    var actionBoard = [];
+    for (var x = 0; x < world.xMax; x++) {
+        var line = [];
+        for (var y = 0; y < world.yMax; y++) {
+            line.push(0);
+        }
+        actionBoard.push(line);
+    }
+    world.player.actionBoard = actionBoard;
+
+
     world.cycle++;
     //création matrice vide
     var emptyBoard = [];
