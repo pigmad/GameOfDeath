@@ -23,35 +23,36 @@ canvas{
     height: 100%;
 }
 
+.nav-item{
+    margin-top:1em;
+}
+
 .dropdown {
-    margin-left: 10px;
+    margin-left: 1em;
 }
 
 .dropdown-item {
     display: inline-flex;
+    width: 9em;
 }
 
 .scrollable-dropdown {
     height: auto;
-    max-height: 300px;
+    max-height: 60em;
     overflow-x: hidden;
     overflow-y: scroll;
 }
 
-.progess-nav{
-    min-width: 100%;
-    margin-top: 15px;
-    margin-left: 15px;
-}
-
 .logo{
-    margin-right: 10px;
-    margin-left: 10px;
+    margin-right: 1em;
+    margin-left: 1em;
+    width:3em;
+    height:3em;
 }
 
 .color-square{
-    height: 18px;
-    width: 18px;
+    height: 1em;
+    width: 1em;
     margin-top: 5px;
     margin-left: 5px;
 }
