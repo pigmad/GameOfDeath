@@ -25,6 +25,9 @@ ENERGY_MAX = 10000;
 
 //cout en énergie d'une bombe
 BOMB_COST = 2000;
+FIRE_COST = 3000;
+ICE_COST = 3000;
+BAIT_COST = 3000;
 
 //classe représentant le joueur avec une jauge d'énergie et un tableau d'actions avec une bombe, du feu
 class Player {
@@ -117,6 +120,7 @@ class World {
             if (world.player.energy < ENERGY_MAX)
             {
                 world.player.energy++;
+                document.getElementById("value").innerHTML = world.player.energy.toString();
                 window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 0.01).toString());
                 window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
             }
@@ -136,6 +140,7 @@ class World {
                 if (world.player.energy < ENERGY_MAX)
                 {
                     world.player.energy++;
+                    document.getElementById("value").innerHTML = world.player.energy.toString();
                     window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 0.01).toString());
                     window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
                 }
@@ -159,6 +164,7 @@ class World {
                 if (world.player.energy < ENERGY_MAX)
                 {
                     world.player.energy++;
+                    document.getElementById("value").innerHTML = world.player.energy.toString();
                     window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 0.01).toString());
                     window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
                 }
@@ -226,17 +232,25 @@ function worldStep() {
     // boucler sur le tableau du joueur pour faire effet des bombes puis init le plateau du joueur
     for (var x = 0; x < world.xMax; x++) {
         for (var y = 0; y < world.yMax; y++) {
-            if (world.player.actionBoard[x][y] == -3) {
+            if (world.player.actionBoard[x][y] == BOMB) {
                 //destruction de 5 cellules
                 world.board[x][y] = -1;
                 world.board[(x - 1 + world.xMax) % world.xMax][y] = -1;
                 world.board[(x + 1) % world.xMax][y] = -1;
                 world.board[x][(y - 1 + world.yMax) % world.yMax] = -1;
                 world.board[x][(y + 1) % world.yMax] = -1;
-                //baisse de l'énergie
-                world.player.energy = world.player.energy - BOMB_COST;
-                window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) - 20).toString());
-                window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
+            }
+            else if (world.player.actionBoard[x][y] == FIRE)
+            {
+                           
+            }
+            else if (world.player.actionBoard[x][y] == ICE)
+            {
+
+            }
+            else if (world.player.actionBoard[x][y] == BAIT)
+            {
+
             }
         }
     }

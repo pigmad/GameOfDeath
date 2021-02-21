@@ -52,8 +52,102 @@ function addUserAction(evt) {
         //si l'utilisateur clique sur un objet qui est déjà sur le plateau alors il disparait
         if (world.player.actionBoard[mousePos.xCell][mousePos.yCell] === selectedImageCode) {
             world.player.actionBoard[mousePos.xCell][mousePos.yCell] = 0;
+            //augmentation de l'énergie: cas bombe
+            if (selectedImageCode == BOMB)
+            {
+                world.player.energy = world.player.energy + BOMB_COST;
+            }
+            //cas feu
+            else if (selectedImageCode == FIRE)
+            {
+                world.player.energy = world.player.energy + FIRE_COST;
+            }
+            //cas glace
+            else if (selectedImageCode == ICE)
+            {
+                world.player.energy = world.player.energy + ICE_COST;
+            }
+            //cas appat
+            else if (selectedImageCode == BAIT)
+            {
+                world.player.energy = world.player.energy + BAIT_COST;
+            }
+            //mise à jour des éléments graphiques selon les objets
+            document.getElementById("value").innerHTML = world.player.energy.toString();
+            if (selectedImageCode == BOMB)
+            {
+                window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + BOMB_COST/100).toString());
+            }
+            else if (selectedImageCode == FIRE)
+            {
+                window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + FIRE_COST/100).toString());
+            }
+            else if (selectedImageCode == ICE)
+            {
+                window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + ICE_COST/100).toString());
+            }
+            else if (selectedImageCode == BAIT)
+            {
+                window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + BAIT_COST/100).toString());
+            }
+            window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
         } else {
-            world.player.actionBoard[mousePos.xCell][mousePos.yCell] = selectedImageCode;
+            //cas bombe
+            if (selectedImageCode == BOMB)
+            {
+                //si l'énergie du joueur est suffisante pour poser une bombe
+                if (world.player.energy > BOMB_COST)
+                {
+                    world.player.actionBoard[mousePos.xCell][mousePos.yCell] = selectedImageCode;
+                    //baisse de l'énergie
+                    world.player.energy = world.player.energy - BOMB_COST;
+                    document.getElementById("value").innerHTML = world.player.energy.toString();
+                    window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) - BOMB_COST/100).toString());
+                    window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
+                }
+            }
+            //cas feu
+            if (selectedImageCode == FIRE)
+            {
+                //si l'énergie du joueur est suffisante pour poser un feu
+                if (world.player.energy > FIRE_COST)
+                {
+                    world.player.actionBoard[mousePos.xCell][mousePos.yCell] = selectedImageCode;
+                    //baisse de l'énergie
+                    world.player.energy = world.player.energy - FIRE_COST;
+                    document.getElementById("value").innerHTML = world.player.energy.toString();
+                    window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) - FIRE_COST/100).toString());
+                    window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
+                }
+            }
+            //cas glace
+            if (selectedImageCode == ICE)
+            {
+                //si l'énergie du joueur est suffisante pour poser une glace
+                if (world.player.energy > ICE_COST)
+                {
+                    world.player.actionBoard[mousePos.xCell][mousePos.yCell] = selectedImageCode;
+                    //baisse de l'énergie
+                    world.player.energy = world.player.energy - ICE_COST;
+                    document.getElementById("value").innerHTML = world.player.energy.toString();
+                    window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) - ICE_COST/100).toString());
+                    window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
+                }
+            }
+            //cas appat
+            if (selectedImageCode == BAIT)
+            {
+                //si l'énergie du joueur est suffisante pour poser un appat
+                if (world.player.energy > BAIT_COST)
+                {
+                    world.player.actionBoard[mousePos.xCell][mousePos.yCell] = selectedImageCode;
+                    //baisse de l'énergie
+                    world.player.energy = world.player.energy - BAIT_COST;
+                    document.getElementById("value").innerHTML = world.player.energy.toString();
+                    window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) - BAIT_COST/100).toString());
+                    window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
+                }
+            }
         }
         drawUserActions();
     }
@@ -147,13 +241,68 @@ function selectImage(selectedImage) {
     }
     //cas où l'utilisateur clique sur une image (cela ajoute un cadre autour)
     else{
-        resetImagesBorder();
-        selectedImage.style.border = "2px white solid";
-        selectedImage.style.borderRadius = "4px";
-        window.selectedImageCode = selectedImageCode;
-    }
-    if (autoplay) {
-        toggleAutoplay();
+        //cas où il clique sur une bombe
+        if (selectedImageCode == BOMB)
+        {
+            // si son énergie est supérieure au cout de la bombe
+            if (world.player.energy >= BOMB_COST)
+            {
+                resetImagesBorder();
+                selectedImage.style.border = "2px white solid";
+                selectedImage.style.borderRadius = "4px";
+                window.selectedImageCode = selectedImageCode;
+
+                if (autoplay) {
+                    toggleAutoplay();
+                }
+            }
+        }
+        else if (selectedImageCode == FIRE)
+        {
+            // si son énergie est supérieure au cout du feu
+            if (world.player.energy >= FIRE_COST)
+            {
+                resetImagesBorder();
+                selectedImage.style.border = "2px white solid";
+                selectedImage.style.borderRadius = "4px";
+                window.selectedImageCode = selectedImageCode;
+
+                if (autoplay) {
+                    toggleAutoplay();
+                }
+            }
+        }
+        else if (selectedImageCode == ICE)
+        {
+            // si son énergie est supérieure au cout de la glace
+            if (world.player.energy >= ICE_COST)
+            {
+                resetImagesBorder();
+                selectedImage.style.border = "2px white solid";
+                selectedImage.style.borderRadius = "4px";
+                window.selectedImageCode = selectedImageCode;
+
+                if (autoplay) {
+                    toggleAutoplay();
+                }
+            }
+        }
+        else if (selectedImageCode == BAIT)
+        {
+            // si son énergie est supérieure au cout de l'appat
+            if (world.player.energy >= BAIT_COST)
+            {
+                resetImagesBorder();
+                selectedImage.style.border = "2px white solid";
+                selectedImage.style.borderRadius = "4px";
+                window.selectedImageCode = selectedImageCode;
+
+                if (autoplay) {
+                    toggleAutoplay();
+                }
+            }
+        }
+        
     }
 }
 
