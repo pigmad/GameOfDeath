@@ -41,7 +41,14 @@ function drawHoverImage(evt){
         var mousePos = getMousePosition(evt);
         var image = new Image();
         image.src = getSelectedImageSrc(window.selectedImageCode);
-        ctx.drawImage(image, mousePos.xCell * STEP, mousePos.yCell * STEP, STEP, STEP);
+        if (selectedImageCode == BOMB)
+        {
+            ctx.drawImage(image, mousePos.xCell * STEP, mousePos.yCell * STEP, STEP, STEP);
+            ctx.drawImage(image, (mousePos.xCell * STEP + STEP) % cvs.width, mousePos.yCell * STEP, STEP, STEP);
+            ctx.drawImage(image, (mousePos.xCell * STEP - STEP + cvs.width) % cvs.width, mousePos.yCell * STEP, STEP, STEP);
+            ctx.drawImage(image, mousePos.xCell * STEP, (mousePos.yCell * STEP + STEP) % cvs.height, STEP, STEP);
+            ctx.drawImage(image, mousePos.xCell * STEP, (mousePos.yCell * STEP - STEP + cvs.height) % cvs.height, STEP, STEP);
+        }
     }
 }
 
@@ -50,11 +57,16 @@ function addUserAction(evt) {
     if (selectedImageCode) {
         var mousePos = getMousePosition(evt);
         //si l'utilisateur clique sur un objet qui est déjà sur le plateau alors il disparait
-        if (world.player.actionBoard[mousePos.xCell][mousePos.yCell] === selectedImageCode) {
+        if (world.player.actionBoard[mousePos.xCell][mousePos.yCell] === selectedImageCode && world.player.actionBoard[(mousePos.xCell + 1) % world.player.actionBoard.length][mousePos.yCell] == selectedImageCode && world.player.actionBoard[(mousePos.xCell - 1 + world.player.actionBoard.length) % world.player.actionBoard.length][mousePos.yCell] == selectedImageCode &&  world.player.actionBoard[mousePos.xCell][(mousePos.yCell + 1) % world.player.actionBoard[mousePos.xCell].length] == selectedImageCode &&  world.player.actionBoard[mousePos.xCell][(mousePos.yCell - 1 + world.player.actionBoard[mousePos.xCell].length) % world.player.actionBoard[mousePos.xCell].length] == selectedImageCode) {
             world.player.actionBoard[mousePos.xCell][mousePos.yCell] = 0;
             //augmentation de l'énergie: cas bombe
             if (selectedImageCode == BOMB)
             {
+                //effacer les images de bombes du plateau
+                world.player.actionBoard[(mousePos.xCell + 1) % world.player.actionBoard.length][mousePos.yCell] = 0;
+                world.player.actionBoard[(mousePos.xCell - 1 + world.player.actionBoard.length) % world.player.actionBoard.length][mousePos.yCell] = 0;
+                world.player.actionBoard[mousePos.xCell][(mousePos.yCell + 1) % world.player.actionBoard[mousePos.xCell].length] = 0;
+                world.player.actionBoard[mousePos.xCell][(mousePos.yCell - 1 + world.player.actionBoard[mousePos.xCell].length) % world.player.actionBoard[mousePos.xCell].length] = 0;
                 world.player.energy = world.player.energy + BOMB_COST;
             }
             //cas feu
@@ -99,6 +111,10 @@ function addUserAction(evt) {
                 if (world.player.energy > BOMB_COST)
                 {
                     world.player.actionBoard[mousePos.xCell][mousePos.yCell] = selectedImageCode;
+                    world.player.actionBoard[(mousePos.xCell + 1) % world.player.actionBoard.length][mousePos.yCell] = selectedImageCode;
+                    world.player.actionBoard[(mousePos.xCell - 1 + world.player.actionBoard.length) % world.player.actionBoard.length][mousePos.yCell] = selectedImageCode;
+                    world.player.actionBoard[mousePos.xCell][(mousePos.yCell + 1) % world.player.actionBoard[mousePos.xCell].length] = selectedImageCode;
+                    world.player.actionBoard[mousePos.xCell][(mousePos.yCell - 1 + world.player.actionBoard[mousePos.xCell].length) % world.player.actionBoard[mousePos.xCell].length] = selectedImageCode;
                     //baisse de l'énergie
                     world.player.energy = world.player.energy - BOMB_COST;
                     document.getElementById("value").innerHTML = world.player.energy.toString();
@@ -148,6 +164,8 @@ function addUserAction(evt) {
                     window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
                 }
             }
+            /*autoplay = false;
+            toggleAutoplay();*/
         }
         drawUserActions();
     }
@@ -170,7 +188,7 @@ function drawGrid() {
     var w = cvs.width;
     var h = cvs.height;
     // couleur noire pour les lignes autour des carrés de la grille
-    ctx.strokeStyle = 'rgb(0,0,0)';
+    ctx.strokeStyle = 'rgb(50,50,50)';
     //largeur des lignes
     ctx.lineWidth = 1;
     //tracé des lignes verticales
