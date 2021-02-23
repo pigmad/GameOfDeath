@@ -49,6 +49,18 @@ function drawHoverImage(evt){
             ctx.drawImage(image, mousePos.xCell * STEP, (mousePos.yCell * STEP + STEP) % cvs.height, STEP, STEP);
             ctx.drawImage(image, mousePos.xCell * STEP, (mousePos.yCell * STEP - STEP + cvs.height) % cvs.height, STEP, STEP);
         }
+        else if(selectedImageCode == FIRE)
+        {
+            ctx.drawImage(image, mousePos.xCell * STEP, mousePos.yCell * STEP, STEP, STEP);
+        }
+        else if(selectedImageCode == ICE)
+        {
+            ctx.drawImage(image, mousePos.xCell * STEP, mousePos.yCell * STEP, STEP, STEP);
+        }
+        else if(selectedImageCode == BAIT)
+        {
+            ctx.drawImage(image, mousePos.xCell * STEP, mousePos.yCell * STEP, STEP, STEP);
+        }
     }
 }
 
