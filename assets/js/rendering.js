@@ -108,7 +108,7 @@ function addUserAction(evt) {
             if (selectedImageCode == BOMB)
             {
                 //si l'énergie du joueur est suffisante pour poser une bombe
-                if (world.player.energy > BOMB_COST)
+                if (world.player.energy >= BOMB_COST)
                 {
                     world.player.actionBoard[mousePos.xCell][mousePos.yCell] = selectedImageCode;
                     world.player.actionBoard[(mousePos.xCell + 1) % world.player.actionBoard.length][mousePos.yCell] = selectedImageCode;
@@ -126,7 +126,7 @@ function addUserAction(evt) {
             if (selectedImageCode == FIRE)
             {
                 //si l'énergie du joueur est suffisante pour poser un feu
-                if (world.player.energy > FIRE_COST)
+                if (world.player.energy >= FIRE_COST)
                 {
                     world.player.actionBoard[mousePos.xCell][mousePos.yCell] = selectedImageCode;
                     //baisse de l'énergie
@@ -140,7 +140,7 @@ function addUserAction(evt) {
             if (selectedImageCode == ICE)
             {
                 //si l'énergie du joueur est suffisante pour poser une glace
-                if (world.player.energy > ICE_COST)
+                if (world.player.energy >= ICE_COST)
                 {
                     world.player.actionBoard[mousePos.xCell][mousePos.yCell] = selectedImageCode;
                     //baisse de l'énergie
@@ -154,7 +154,7 @@ function addUserAction(evt) {
             if (selectedImageCode == BAIT)
             {
                 //si l'énergie du joueur est suffisante pour poser un appat
-                if (world.player.energy > BAIT_COST)
+                if (world.player.energy >= BAIT_COST)
                 {
                     world.player.actionBoard[mousePos.xCell][mousePos.yCell] = selectedImageCode;
                     //baisse de l'énergie

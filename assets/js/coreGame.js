@@ -237,12 +237,8 @@ function worldStep() {
     for (var x = 0; x < world.xMax; x++) {
         for (var y = 0; y < world.yMax; y++) {
             if (world.player.actionBoard[x][y] == BOMB) {
-                //destruction de 5 cellules
+                //destruction de la cellule
                 world.board[x][y] = -1;
-                world.board[(x - 1 + world.xMax) % world.xMax][y] = -1;
-                world.board[(x + 1) % world.xMax][y] = -1;
-                world.board[x][(y - 1 + world.yMax) % world.yMax] = -1;
-                world.board[x][(y + 1) % world.yMax] = -1;
             }
             else if (world.player.actionBoard[x][y] == FIRE)
             {
