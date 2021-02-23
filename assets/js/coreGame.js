@@ -21,13 +21,13 @@ ICE = -5;
 BAIT = -6;
 
 //énergie maximale
-ENERGY_MAX = 10000;
+ENERGY_MAX = 1000;
 
 //cout en énergie d'une bombe
-BOMB_COST = 2000;
-FIRE_COST = 3000;
-ICE_COST = 3000;
-BAIT_COST = 3000;
+BOMB_COST = 100;
+FIRE_COST = 200;
+ICE_COST = 200;
+BAIT_COST = 200;
 
 //classe représentant le joueur avec une jauge d'énergie et un tableau d'actions avec une bombe, du feu
 class Player {
@@ -122,7 +122,7 @@ class World {
             {
                 world.player.energy++;
                 document.getElementById("value").innerHTML = world.player.energy.toString();
-                window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 0.01).toString());
+                window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 0.1).toString());
                 window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
             }
         }
@@ -143,7 +143,7 @@ class World {
                 {
                     world.player.energy++;
                     document.getElementById("value").innerHTML = world.player.energy.toString();
-                    window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 0.01).toString());
+                    window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 0.1).toString());
                     window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
                 }
             } 
@@ -168,7 +168,7 @@ class World {
                 {
                     world.player.energy++;
                     document.getElementById("value").innerHTML = world.player.energy.toString();
-                    window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 0.01).toString());
+                    window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 0.1).toString());
                     window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
                 }
             }

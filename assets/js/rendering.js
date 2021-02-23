@@ -42,12 +42,16 @@ function drawHoverImage(evt){
         var image = new Image();
         image.src = getSelectedImageSrc(window.selectedImageCode);
         if (selectedImageCode == BOMB)
-        {
-            ctx.drawImage(image, mousePos.xCell * STEP, mousePos.yCell * STEP, STEP, STEP);
-            ctx.drawImage(image, (mousePos.xCell * STEP + STEP) % cvs.width, mousePos.yCell * STEP, STEP, STEP);
-            ctx.drawImage(image, (mousePos.xCell * STEP - STEP + cvs.width) % cvs.width, mousePos.yCell * STEP, STEP, STEP);
-            ctx.drawImage(image, mousePos.xCell * STEP, (mousePos.yCell * STEP + STEP) % cvs.height, STEP, STEP);
-            ctx.drawImage(image, mousePos.xCell * STEP, (mousePos.yCell * STEP - STEP + cvs.height) % cvs.height, STEP, STEP);
+        {   
+            //bombe de rayon 10*10
+            for(var x = 0; x < 10; x++)
+            {
+                for(var y = 0; y < 10; y++)
+                {
+                    ctx.drawImage(image, ((mousePos.xCell + x - 4) * STEP + cvs.width) % cvs.width, ((mousePos.yCell + y - 4) * STEP + cvs.height) % cvs.height, STEP, STEP);
+                }
+            }
+            
         }
         else if(selectedImageCode == FIRE)
         {
@@ -100,7 +104,7 @@ function addUserAction(evt) {
             document.getElementById("value").innerHTML = world.player.energy.toString();
             if (selectedImageCode == BOMB)
             {
-                window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + BOMB_COST/100).toString());
+                window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 10).toString());
             }
             else if (selectedImageCode == FIRE)
             {
@@ -122,15 +126,18 @@ function addUserAction(evt) {
                 //si l'énergie du joueur est suffisante pour poser une bombe
                 if (world.player.energy >= BOMB_COST)
                 {
-                    world.player.actionBoard[mousePos.xCell][mousePos.yCell] = selectedImageCode;
-                    world.player.actionBoard[(mousePos.xCell + 1) % world.player.actionBoard.length][mousePos.yCell] = selectedImageCode;
-                    world.player.actionBoard[(mousePos.xCell - 1 + world.player.actionBoard.length) % world.player.actionBoard.length][mousePos.yCell] = selectedImageCode;
-                    world.player.actionBoard[mousePos.xCell][(mousePos.yCell + 1) % world.player.actionBoard[mousePos.xCell].length] = selectedImageCode;
-                    world.player.actionBoard[mousePos.xCell][(mousePos.yCell - 1 + world.player.actionBoard[mousePos.xCell].length) % world.player.actionBoard[mousePos.xCell].length] = selectedImageCode;
+                    //bombe de rayon 10*10
+                    for(var x = 0; x < 10; x++)
+                    {
+                        for(var y = 0; y < 10; y++)
+                        {
+                            world.player.actionBoard[(mousePos.xCell + x - 4 + world.player.actionBoard.length) % world.player.actionBoard.length][(mousePos.yCell + y - 4 + world.player.actionBoard[mousePos.xCell].length) % world.player.actionBoard[mousePos.xCell].length] = selectedImageCode;
+                        }
+                    }
                     //baisse de l'énergie
                     world.player.energy = world.player.energy - BOMB_COST;
                     document.getElementById("value").innerHTML = world.player.energy.toString();
-                    window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) - BOMB_COST/100).toString());
+                    window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) - 10).toString());
                     window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
                 }
             }
