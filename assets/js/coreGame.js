@@ -115,6 +115,7 @@ class World {
         } 
         //la cellule est créée aux coordonnées (x,y)
         else {
+            document.getElementById("nbcellules").innerHTML = (parseInt(document.getElementById("nbcellules").innerHTML) + 1).toString();
             board[x][y] = cellValue;
             //si l'énergie du joueur est inférieure au maximum
             if (world.player.energy < ENERGY_MAX)
@@ -135,6 +136,7 @@ class World {
         } else {
             //cas où il n'y a pas de mutation
             if (Math.random() > this.pMut) {
+                document.getElementById("nbcellules").innerHTML = (parseInt(document.getElementById("nbcellules").innerHTML) + 1).toString();
                 board[x][y] = cellValue;
                 //si l'énergie du joueur est inférieure au maximum
                 if (world.player.energy < ENERGY_MAX)
@@ -155,6 +157,7 @@ class World {
                 var mutatedCell = new Species(mutatedActionArray, true, mutatedColor);
                 this.speciesArray.push(mutatedCell);
                 //création de cellules (ajout dans le tableau des cellules) de l'espèce mutée aux coordonnées (x,y) ainsi qu'aux 4 cases (nord, sud, est, ouest) adjacentes
+                document.getElementById("nbcellules").innerHTML = (parseInt(document.getElementById("nbcellules").innerHTML) + 5).toString();
                 board[x][y] = this.speciesArray.length - 1;
                 board[(x - 1 + world.xMax) % world.xMax][y] = this.speciesArray.length - 1;
                 board[(x + 1) % world.xMax][y] = this.speciesArray.length - 1;
@@ -214,6 +217,7 @@ function initWorld() {
         var line = [];
         for (var y = 0; y < yMax; y++) {
             if (Math.random() < pCreate) {
+                document.getElementById("nbcellules").innerHTML = (parseInt(document.getElementById("nbcellules").innerHTML) + 1).toString();
                 //la valeur d'une cellule
                 line.push(Math.floor(Math.random() * SPECIESNUMBER));
             } else {
