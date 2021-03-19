@@ -17,6 +17,10 @@ EAST = 5; //créer une cellule à l'est
 //USER ACTION CODES
 BOMB = -3;
 FIRE = -4;
+FIRE2 = -41;
+FIRE3 = -42;
+FIRE4 = -43;
+FIRE5 = -44;
 ICE = -5;
 BAIT = -6;
 
@@ -115,27 +119,9 @@ class World {
         } 
         //la cellule est créée aux coordonnées (x,y)
         else {
-            document.getElementById("nbcellules").innerHTML = (parseInt(document.getElementById("nbcellules").innerHTML) + 1).toString();
-            board[x][y] = cellValue;
-            //si l'énergie du joueur est inférieure au maximum
-            if (world.player.energy < ENERGY_MAX)
+            //cas où il n'y a pas de feu
+            if(world.player.actionBoard[x][y] != FIRE2 && world.player.actionBoard[x][y] != FIRE3 && world.player.actionBoard[x][y] != FIRE4 && world.player.actionBoard[x][y] != FIRE5)
             {
-                world.player.energy++;
-                document.getElementById("value").innerHTML = world.player.energy.toString();
-                window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 0.1).toString());
-                window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
-            }
-        }
-    }
-
-    //ajout d'une cellule cellValue aux coordonnées (x,y)
-    cellActionMut(x, y, cellValue, board) {
-        //s'il y a déjà une cellule d'une autre espèce alors la cellule est détruite
-        if (board[x][y] !== -1 && board[x][y] !== cellValue) {
-            board[x][y] = -2;
-        } else {
-            //cas où il n'y a pas de mutation
-            if (Math.random() > this.pMut) {
                 document.getElementById("nbcellules").innerHTML = (parseInt(document.getElementById("nbcellules").innerHTML) + 1).toString();
                 board[x][y] = cellValue;
                 //si l'énergie du joueur est inférieure au maximum
@@ -147,29 +133,55 @@ class World {
                     window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
                 }
             } 
-            //cas où il y a une mutation
-            else {
-                var species = world.speciesArray[cellValue];
-                //calcul du tableau des actions de l'espèce mutée
-                var mutatedActionArray = species.mutateGenome();
-                //calcul de la couleur de l'espèce mutée
-                var mutatedColor = species.mutateColor();
-                var mutatedCell = new Species(mutatedActionArray, true, mutatedColor);
-                this.speciesArray.push(mutatedCell);
-                //création de cellules (ajout dans le tableau des cellules) de l'espèce mutée aux coordonnées (x,y) ainsi qu'aux 4 cases (nord, sud, est, ouest) adjacentes
-                document.getElementById("nbcellules").innerHTML = (parseInt(document.getElementById("nbcellules").innerHTML) + 5).toString();
-                board[x][y] = this.speciesArray.length - 1;
-                board[(x - 1 + world.xMax) % world.xMax][y] = this.speciesArray.length - 1;
-                board[(x + 1) % world.xMax][y] = this.speciesArray.length - 1;
-                board[x][(y - 1 + world.yMax) % world.yMax] = this.speciesArray.length - 1;
-                board[x][(y + 1) % world.yMax] = this.speciesArray.length - 1;
-                //si l'énergie du joueur est inférieure au maximum
-                if (world.player.energy < ENERGY_MAX)
-                {
-                    world.player.energy++;
-                    document.getElementById("value").innerHTML = world.player.energy.toString();
-                    window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 0.1).toString());
-                    window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
+        }
+    }
+
+    //ajout d'une cellule cellValue aux coordonnées (x,y)
+    cellActionMut(x, y, cellValue, board) {
+        //s'il y a déjà une cellule d'une autre espèce alors la cellule est détruite
+        if (board[x][y] !== -1 && board[x][y] !== cellValue) {
+            board[x][y] = -2;
+        } else {
+            //cas où il n'y a pas de feu
+            if(world.player.actionBoard[x][y] != FIRE2 && world.player.actionBoard[x][y] != FIRE3 && world.player.actionBoard[x][y] != FIRE4 && world.player.actionBoard[x][y] != FIRE5)
+            {
+                //cas où il n'y a pas de mutation
+                if (Math.random() > this.pMut) {
+                    document.getElementById("nbcellules").innerHTML = (parseInt(document.getElementById("nbcellules").innerHTML) + 1).toString();
+                    board[x][y] = cellValue;
+                    //si l'énergie du joueur est inférieure au maximum
+                    if (world.player.energy < ENERGY_MAX)
+                    {
+                        world.player.energy++;
+                        document.getElementById("value").innerHTML = world.player.energy.toString();
+                        window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 0.1).toString());
+                        window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
+                    }
+                } 
+                //cas où il y a une mutation
+                else {
+                    var species = world.speciesArray[cellValue];
+                    //calcul du tableau des actions de l'espèce mutée
+                    var mutatedActionArray = species.mutateGenome();
+                    //calcul de la couleur de l'espèce mutée
+                    var mutatedColor = species.mutateColor();
+                    var mutatedCell = new Species(mutatedActionArray, true, mutatedColor);
+                    this.speciesArray.push(mutatedCell);
+                    //création de cellules (ajout dans le tableau des cellules) de l'espèce mutée aux coordonnées (x,y) ainsi qu'aux 4 cases (nord, sud, est, ouest) adjacentes
+                    document.getElementById("nbcellules").innerHTML = (parseInt(document.getElementById("nbcellules").innerHTML) + 5).toString();
+                    board[x][y] = this.speciesArray.length - 1;
+                    board[(x - 1 + world.xMax) % world.xMax][y] = this.speciesArray.length - 1;
+                    board[(x + 1) % world.xMax][y] = this.speciesArray.length - 1;
+                    board[x][(y - 1 + world.yMax) % world.yMax] = this.speciesArray.length - 1;
+                    board[x][(y + 1) % world.yMax] = this.speciesArray.length - 1;
+                    //si l'énergie du joueur est inférieure au maximum
+                    if (world.player.energy < ENERGY_MAX)
+                    {
+                        world.player.energy++;
+                        document.getElementById("value").innerHTML = world.player.energy.toString();
+                        window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 0.1).toString());
+                        window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
+                    }
                 }
             }
         }
@@ -233,6 +245,16 @@ function initWorld() {
 }
 
 function worldStep() {
+    //création matrice vide
+    var emptyBoard = [];
+    for (var x = 0; x < world.xMax; x++) {
+        var line = [];
+        for (var y = 0; y < world.yMax; y++) {
+            line.push(-1);
+        }
+        emptyBoard.push(line);
+    }
+
     // boucler sur le tableau du joueur pour faire effet des bombes puis init le plateau du joueur
     for (var x = 0; x < world.xMax; x++) {
         for (var y = 0; y < world.yMax; y++) {
@@ -242,7 +264,29 @@ function worldStep() {
             }
             else if (world.player.actionBoard[x][y] == FIRE)
             {
-                           
+                //destruction de la cellule
+                world.board[x][y] = -1;   
+                //emptyBoard[x][y] = FIRE2; 
+            }
+            else if(world.player.actionBoard[x][y] == FIRE2)
+            {
+                world.board[x][y] = -1;
+                //emptyBoard[x][y] = FIRE3;
+            }
+            else if(world.player.actionBoard[x][y] == FIRE3)
+            {
+                world.board[x][y] = -1;
+                //emptyBoard[x][y] = FIRE4;
+            }
+            else if(world.player.actionBoard[x][y] == FIRE4)
+            {
+                world.board[x][y] = -1;
+                //emptyBoard[x][y] = FIRE5;
+            }
+            else if(world.player.actionBoard[x][y] == FIRE5)
+            {
+                world.board[x][y] = -1;
+                //emptyBoard[x][y] = -1;
             }
             else if (world.player.actionBoard[x][y] == ICE)
             {
@@ -254,7 +298,7 @@ function worldStep() {
             }
         }
     }
-    var actionBoard = [];
+    /*var actionBoard = [];
     for (var x = 0; x < world.xMax; x++) {
         var line = [];
         for (var y = 0; y < world.yMax; y++) {
@@ -262,19 +306,43 @@ function worldStep() {
         }
         actionBoard.push(line);
     }
-    world.player.actionBoard = actionBoard;
+    world.player.actionBoard = actionBoard;*/  
+
+    var actionBoard = [];
+    for(var x = 0; x < world.player.actionBoard.length; x++)
+    {
+        var line = [];
+        for(var y = 0; y < world.player.actionBoard[x].length; y++)
+        {
+            //cas où il y a un feu
+            if(world.player.actionBoard[x][y] == FIRE)
+            {
+                line.push(FIRE2);
+            }
+            else if(world.player.actionBoard[x][y] == FIRE2)
+            {
+                line.push(FIRE3);
+            }
+            else if(world.player.actionBoard[x][y] == FIRE3)
+            {
+                line.push(FIRE4);
+            }
+            else if(world.player.actionBoard[x][y] == FIRE4)
+            {
+                line.push(FIRE5);
+            }
+            else
+            {
+                line.push(0);
+            }
+        }
+        actionBoard.push(line);
+    }
+    world.player.actionBoard = actionBoard;  
+    
 
 
     world.cycle++;
-    //création matrice vide
-    var emptyBoard = [];
-    for (var x = 0; x < world.xMax; x++) {
-        var line = [];
-        for (var y = 0; y < world.yMax; y++) {
-            line.push(-1);
-        }
-        emptyBoard.push(line);
-    }
     for (var x = 0; x < world.xMax; x++) {
         for (var y = 0; y < world.yMax; y++) {
             var cellValue = world.board[x][y];
@@ -311,19 +379,49 @@ function worldStep() {
             }
         }
     }
+    var image = new Image();
     for (var x = 0; x < world.xMax; x++) {
         for (var y = 0; y < world.yMax; y++) {
             var cellValue = emptyBoard[x][y];
             if (cellValue === -2) {
                 emptyBoard[x][y] = -1;
             }
+            /*else if(cellValue == FIRE)
+            {
+                image.src = getSelectedImageSrc(FIRE);
+                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
+            }
+            else if(cellValue == FIRE2)
+            {
+                image.src = getSelectedImageSrc(FIRE2);
+                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
+            }
+            else if(cellValue == FIRE3)
+            {
+                image.src = getSelectedImageSrc(FIRE3);
+                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
+            }
+            else if(cellValue == FIRE4)
+            {
+                image.src = getSelectedImageSrc(FIRE4);
+                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
+            }
+            else if(cellValue == FIRE5)
+            {
+                image.src = getSelectedImageSrc(FIRE5);
+                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
+            }*/
         }
     }
+    
     //world.board = JSON.parse(JSON.stringify(emptyBoard));
     world.board = emptyBoard;
+    //affiche le feu restant
+    //displayFire();
     checkAliveSpecies();
     deleteDeadSpecies();
-    drawWorld(world);
+    //drawWorld(world);
+    drawUserActions();
     setDropDownAliveSpecies(world);
 }
 
