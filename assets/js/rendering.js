@@ -34,7 +34,7 @@ function getMousePosition(evt) {
 
 //fonction qui affiche un objet sur le plateau en fonction de la position de la souris de l'utilisateur
 function drawHoverImage(evt){
-    drawUserActions();
+    drawWorld(world);
     // si un objet (bombe, feu, ...) est sélectionné
     if (selectedImageCode) {
         //position de la souris de l'utilisateur sur le plateau
@@ -83,42 +83,26 @@ function addUserAction(evt) {
                 world.player.actionBoard[(mousePos.xCell - 1 + world.player.actionBoard.length) % world.player.actionBoard.length][mousePos.yCell] = 0;
                 world.player.actionBoard[mousePos.xCell][(mousePos.yCell + 1) % world.player.actionBoard[mousePos.xCell].length] = 0;
                 world.player.actionBoard[mousePos.xCell][(mousePos.yCell - 1 + world.player.actionBoard[mousePos.xCell].length) % world.player.actionBoard[mousePos.xCell].length] = 0;
-                world.player.energy = world.player.energy + BOMB_COST;
+                world.player.addEnergy(BOMB_COST);
             }
             //cas feu
             else if (selectedImageCode == FIRE)
             {
                 world.player.energy = world.player.energy + FIRE_COST;
+                world.player.addEnergy(FIRE_COST);
             }
             //cas glace
             else if (selectedImageCode == ICE)
             {
                 world.player.energy = world.player.energy + ICE_COST;
+                world.player.addEnergy(ICE_COST);
             }
             //cas appat
             else if (selectedImageCode == BAIT)
             {
                 world.player.energy = world.player.energy + BAIT_COST;
+                world.player.addEnergy(BAIT_COST);
             }
-            //mise à jour des éléments graphiques selon les objets
-            document.getElementById("value").innerHTML = world.player.energy.toString();
-            if (selectedImageCode == BOMB)
-            {
-                window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 10).toString());
-            }
-            else if (selectedImageCode == FIRE)
-            {
-                window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + FIRE_COST/100).toString());
-            }
-            else if (selectedImageCode == ICE)
-            {
-                window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + ICE_COST/100).toString());
-            }
-            else if (selectedImageCode == BAIT)
-            {
-                window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + BAIT_COST/100).toString());
-            }
-            window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
         } else {
             //cas bombe
             if (selectedImageCode == BOMB)
@@ -135,10 +119,7 @@ function addUserAction(evt) {
                         }
                     }
                     //baisse de l'énergie
-                    world.player.energy = world.player.energy - BOMB_COST;
-                    document.getElementById("value").innerHTML = world.player.energy.toString();
-                    window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) - 10).toString());
-                    window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
+                    world.player.removeEnergy(BOMB_COST);
                 }
             }
             //cas feu
@@ -149,10 +130,7 @@ function addUserAction(evt) {
                 {
                     world.player.actionBoard[mousePos.xCell][mousePos.yCell] = selectedImageCode;
                     //baisse de l'énergie
-                    world.player.energy = world.player.energy - FIRE_COST;
-                    document.getElementById("value").innerHTML = world.player.energy.toString();
-                    window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) - FIRE_COST/100).toString());
-                    window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
+                    world.player.removeEnergy(FIRE_COST);
                 }
             }
             //cas glace
@@ -163,10 +141,7 @@ function addUserAction(evt) {
                 {
                     world.player.actionBoard[mousePos.xCell][mousePos.yCell] = selectedImageCode;
                     //baisse de l'énergie
-                    world.player.energy = world.player.energy - ICE_COST;
-                    document.getElementById("value").innerHTML = world.player.energy.toString();
-                    window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) - ICE_COST/100).toString());
-                    window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
+                    world.player.removeEnergy(ICE_COST);
                 }
             }
             //cas appat
@@ -177,16 +152,13 @@ function addUserAction(evt) {
                 {
                     world.player.actionBoard[mousePos.xCell][mousePos.yCell] = selectedImageCode;
                     //baisse de l'énergie
-                    world.player.energy = world.player.energy - BAIT_COST;
-                    document.getElementById("value").innerHTML = world.player.energy.toString();
-                    window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) - BAIT_COST/100).toString());
-                    window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
+                    world.player.removeEnergy(BAIT_COST);
                 }
             }
             /*autoplay = false;
             toggleAutoplay();*/
         }
-        drawUserActions();
+        drawWorld(world);
     }
 }
 
@@ -238,6 +210,9 @@ function drawWorld(world) {
                 ctx.fillStyle = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
                 ctx.fillRect(x * STEP + 1, y * STEP + 1, STEP - 2, STEP - 2);
             }
+            var image = new Image();
+            image.src = getSelectedImageSrc(world.player.actionBoard[x][y]);
+            ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
         }
     }
 }
@@ -253,6 +228,13 @@ function setDropDownAliveSpecies(world) {
         var item = "<li><a class='dropdown-item'>Espèce " + (i + 1) + "<div class='color-square' style='background-color:" + colorString + "'></div>" + "</a></li>";
         dropdown.innerHTML += item;
     }
+}
+
+//fonction qui affiche l'énergie du joueur dans la barre de navigation
+function setEnergy(){
+    document.getElementById("value").innerHTML = world.player.energy.toString();
+    window.barre.setAttribute("aria-valuenow", world.player.energy.toString());
+    window.barre.setAttribute("style", "width: " + (world.player.energy/window.barre.getAttribute("aria-valuemax"))*100 + "%");
 }
 
 //fonction qui enlève les bordures d'une image

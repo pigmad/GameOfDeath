@@ -21,7 +21,7 @@ ICE = -5;
 BAIT = -6;
 
 //énergie maximale
-ENERGY_MAX = 1000;
+ENERGY_MAX = 500;
 
 //cout en énergie d'une bombe
 BOMB_COST = 100;
@@ -34,6 +34,22 @@ class Player {
     constructor(energy, actionBoard) {
         this.energy = energy;
         this.actionBoard = actionBoard;
+    }
+
+    addEnergy(qty){
+        //si l'énergie du joueur est inférieure au maximum
+        if (this.energy + qty <= ENERGY_MAX){
+            this.energy += qty;
+            setEnergy();
+        }
+    }
+
+    removeEnergy(qty){
+        if(this.energy - qty >= 0){
+            this.energy -= qty;
+            setEnergy();
+        }
+        
     }
 }
 
@@ -117,14 +133,7 @@ class World {
         else {
             document.getElementById("nbcellules").innerHTML = (parseInt(document.getElementById("nbcellules").innerHTML) + 1).toString();
             board[x][y] = cellValue;
-            //si l'énergie du joueur est inférieure au maximum
-            if (world.player.energy < ENERGY_MAX)
-            {
-                world.player.energy++;
-                document.getElementById("value").innerHTML = world.player.energy.toString();
-                window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 0.1).toString());
-                window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
-            }
+            
         }
     }
 
@@ -138,14 +147,6 @@ class World {
             if (Math.random() > this.pMut) {
                 document.getElementById("nbcellules").innerHTML = (parseInt(document.getElementById("nbcellules").innerHTML) + 1).toString();
                 board[x][y] = cellValue;
-                //si l'énergie du joueur est inférieure au maximum
-                if (world.player.energy < ENERGY_MAX)
-                {
-                    world.player.energy++;
-                    document.getElementById("value").innerHTML = world.player.energy.toString();
-                    window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 0.1).toString());
-                    window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
-                }
             } 
             //cas où il y a une mutation
             else {
@@ -163,14 +164,6 @@ class World {
                 board[(x + 1) % world.xMax][y] = this.speciesArray.length - 1;
                 board[x][(y - 1 + world.yMax) % world.yMax] = this.speciesArray.length - 1;
                 board[x][(y + 1) % world.yMax] = this.speciesArray.length - 1;
-                //si l'énergie du joueur est inférieure au maximum
-                if (world.player.energy < ENERGY_MAX)
-                {
-                    world.player.energy++;
-                    document.getElementById("value").innerHTML = world.player.energy.toString();
-                    window.barre.setAttribute("aria-valuenow", (parseFloat(window.barre.getAttribute("aria-valuenow"), 10) + 0.1).toString());
-                    window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
-                }
             }
         }
     }
@@ -233,6 +226,8 @@ function initWorld() {
 }
 
 function worldStep() {
+    world.cycle++;
+    world.player.addEnergy(BOMB_COST);
     // boucler sur le tableau du joueur pour faire effet des bombes puis init le plateau du joueur
     for (var x = 0; x < world.xMax; x++) {
         for (var y = 0; y < world.yMax; y++) {
@@ -254,27 +249,22 @@ function worldStep() {
             }
         }
     }
+    //réinitialisation de la matrice des actions du joueur et initialisation d'une matrice vide calcul du prochain step
     var actionBoard = [];
-    for (var x = 0; x < world.xMax; x++) {
-        var line = [];
-        for (var y = 0; y < world.yMax; y++) {
-            line.push(0);
-        }
-        actionBoard.push(line);
-    }
-    world.player.actionBoard = actionBoard;
-
-
-    world.cycle++;
-    //création matrice vide
     var emptyBoard = [];
     for (var x = 0; x < world.xMax; x++) {
-        var line = [];
+        var lineAction = [];
+        var lineEmpty = [];
         for (var y = 0; y < world.yMax; y++) {
-            line.push(-1);
+            lineAction.push(0);
+            lineEmpty.push(-1);
         }
-        emptyBoard.push(line);
+        actionBoard.push(lineAction);
+        emptyBoard.push(lineEmpty);
+
     }
+    world.player.actionBoard = actionBoard;
+    
     for (var x = 0; x < world.xMax; x++) {
         for (var y = 0; y < world.yMax; y++) {
             var cellValue = world.board[x][y];
@@ -311,6 +301,7 @@ function worldStep() {
             }
         }
     }
+    //gestion des conflits
     for (var x = 0; x < world.xMax; x++) {
         for (var y = 0; y < world.yMax; y++) {
             var cellValue = emptyBoard[x][y];
@@ -319,7 +310,6 @@ function worldStep() {
             }
         }
     }
-    //world.board = JSON.parse(JSON.stringify(emptyBoard));
     world.board = emptyBoard;
     checkAliveSpecies();
     deleteDeadSpecies();
@@ -342,6 +332,7 @@ function checkAliveSpecies() {
     }
 }
 
+//fonction qui supprime les espèces éteintes de la liste des espèces
 function deleteDeadSpecies() {
     var speciesAlive = [];
     var boardCopy = JSON.parse(JSON.stringify(world.board));
@@ -376,8 +367,8 @@ function toggleAutoplay() {
     if (!autoplay) {
         button.value = "Stop";
         resetImagesBorder();
-        //appel de la fonction worldstep toutes les 300 milisecondes
-        autoplay = setInterval(worldStep, 300);
+        //appel de la fonction worldstep toutes les 400 milisecondes
+        autoplay = setInterval(worldStep, 400);
     } else {
         button.value = "Jouer";
         clearInterval(autoplay);
