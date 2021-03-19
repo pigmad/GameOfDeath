@@ -266,27 +266,22 @@ function worldStep() {
             {
                 //destruction de la cellule
                 world.board[x][y] = -1;   
-                //emptyBoard[x][y] = FIRE2; 
             }
             else if(world.player.actionBoard[x][y] == FIRE2)
             {
                 world.board[x][y] = -1;
-                //emptyBoard[x][y] = FIRE3;
             }
             else if(world.player.actionBoard[x][y] == FIRE3)
             {
                 world.board[x][y] = -1;
-                //emptyBoard[x][y] = FIRE4;
             }
             else if(world.player.actionBoard[x][y] == FIRE4)
             {
                 world.board[x][y] = -1;
-                //emptyBoard[x][y] = FIRE5;
             }
             else if(world.player.actionBoard[x][y] == FIRE5)
             {
                 world.board[x][y] = -1;
-                //emptyBoard[x][y] = -1;
             }
             else if (world.player.actionBoard[x][y] == ICE)
             {
@@ -298,15 +293,6 @@ function worldStep() {
             }
         }
     }
-    /*var actionBoard = [];
-    for (var x = 0; x < world.xMax; x++) {
-        var line = [];
-        for (var y = 0; y < world.yMax; y++) {
-            line.push(0);
-        }
-        actionBoard.push(line);
-    }
-    world.player.actionBoard = actionBoard;*/  
 
     var actionBoard = [];
     for(var x = 0; x < world.player.actionBoard.length; x++)
@@ -386,41 +372,12 @@ function worldStep() {
             if (cellValue === -2) {
                 emptyBoard[x][y] = -1;
             }
-            /*else if(cellValue == FIRE)
-            {
-                image.src = getSelectedImageSrc(FIRE);
-                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
-            }
-            else if(cellValue == FIRE2)
-            {
-                image.src = getSelectedImageSrc(FIRE2);
-                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
-            }
-            else if(cellValue == FIRE3)
-            {
-                image.src = getSelectedImageSrc(FIRE3);
-                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
-            }
-            else if(cellValue == FIRE4)
-            {
-                image.src = getSelectedImageSrc(FIRE4);
-                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
-            }
-            else if(cellValue == FIRE5)
-            {
-                image.src = getSelectedImageSrc(FIRE5);
-                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
-            }*/
         }
     }
     
-    //world.board = JSON.parse(JSON.stringify(emptyBoard));
     world.board = emptyBoard;
-    //affiche le feu restant
-    //displayFire();
     checkAliveSpecies();
     deleteDeadSpecies();
-    //drawWorld(world);
     drawUserActions();
     setDropDownAliveSpecies(world);
 }

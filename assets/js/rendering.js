@@ -191,8 +191,6 @@ function addUserAction(evt) {
                     window.barre.setAttribute("style", "width: " + window.barre.getAttribute("aria-valuenow") + "%");
                 }
             }
-            /*autoplay = false;
-            toggleAutoplay();*/
         }
         drawUserActions();
     }
@@ -243,71 +241,11 @@ function drawWorld(world) {
                 ctx.fillStyle = 'white';
                 ctx.fillRect(x * STEP + 1, y * STEP + 1, STEP - 2, STEP - 2);
             } 
-            /*else if(cellValue == FIRE)
-            {
-                ctx.fillStyle = 'white';
-                ctx.fillRect(x * STEP + 1, y * STEP + 1, STEP - 2, STEP - 2);
-                image.src = getSelectedImageSrc(FIRE);
-                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
-            }
-            else if(cellValue == FIRE2)
-            {
-                ctx.fillStyle = 'white';
-                ctx.fillRect(x * STEP + 1, y * STEP + 1, STEP - 2, STEP - 2);
-                image.src = getSelectedImageSrc(FIRE2);
-                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
-            }
-            else if(cellValue == FIRE3)
-            {
-                ctx.fillStyle = 'white';
-                ctx.fillRect(x * STEP + 1, y * STEP + 1, STEP - 2, STEP - 2);
-                image.src = getSelectedImageSrc(FIRE3);
-                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
-            }
-            else if(cellValue == FIRE4)
-            {
-                ctx.fillStyle = 'white';
-                ctx.fillRect(x * STEP + 1, y * STEP + 1, STEP - 2, STEP - 2);
-                image.src = getSelectedImageSrc(FIRE4);
-                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
-            }
-            else if(cellValue == FIRE5)
-            {
-                ctx.fillStyle = 'white';
-                ctx.fillRect(x * STEP + 1, y * STEP + 1, STEP - 2, STEP - 2);
-                image.src = getSelectedImageSrc(FIRE5);
-                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
-            }*/
             else {
                 var color = world.speciesArray[cellValue].color;
                 ctx.fillStyle = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
                 ctx.fillRect(x * STEP + 1, y * STEP + 1, STEP - 2, STEP - 2);
             }
-            /*if(world.player.actionBoard[x][y] == FIRE)
-            {
-                image.src = getSelectedImageSrc(FIRE);
-                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
-            }
-            else if(world.player.actionBoard[x][y] == FIRE2)
-            {
-                image.src = getSelectedImageSrc(FIRE2);
-                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
-            }
-            else if(world.player.actionBoard[x][y] == FIRE3)
-            {
-                image.src = getSelectedImageSrc(FIRE3);
-                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
-            }
-            else if(world.player.actionBoard[x][y] == FIRE4)
-            {
-                image.src = getSelectedImageSrc(FIRE4);
-                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
-            }
-            else if(world.player.actionBoard[x][y] == FIRE5)
-            {
-                image.src = getSelectedImageSrc(FIRE5);
-                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
-            }*/
         }
     }
 }
@@ -469,45 +407,6 @@ function getSelectedImageSrc(selectedImageCode) {
         return "assets/img/bait-48.png";
     }
     return "";
-}
-
-//fonction qui affiche le feu restant
-function displayFire(){
-    var image = new Image();
-    for(var x = 0; x < world.xMax; x++)
-    {
-        for(var y = 0; y < world.yMax; y++)
-        {   
-            if(world.board[x][y] == FIRE2)
-            {
-                image.src = getSelectedImageSrc(FIRE2);
-                //world.player.actionBoard[x][y] = FIRE2;
-                //world.board[x][y] = FIRE2;
-                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
-            }
-            if(world.board[x][y] == FIRE3)
-            {
-                image.src = getSelectedImageSrc(FIRE3);
-                //world.player.actionBoard[x][y] = FIRE3;
-                //world.board[x][y] = FIRE3;
-                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
-            }
-            if(world.board[x][y] == FIRE4)
-            {
-                image.src = getSelectedImageSrc(FIRE4);
-                //world.player.actionBoard[x][y] = FIRE4;
-                //world.board[x][y] = FIRE4;
-                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
-            }
-            if(world.board[x][y] == FIRE5)
-            {
-                image.src = getSelectedImageSrc(FIRE5);
-                //world.player.actionBoard[x][y] = FIRE5;
-                //world.board[x][y] = FIRE5;
-                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
-            }
-        }
-    }
 }
 
 /* ***** MAIN ***** */
