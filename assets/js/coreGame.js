@@ -233,6 +233,19 @@ function initWorld() {
 }
 
 function worldStep() {
+    // cas où le joueur perd
+    if (document.getElementById("nbcellules").innerHTML > 100000)
+    {
+        alert("Vous avez perdu");
+        document.location.reload();
+    }
+    //cas où le joueur gagne
+    if(world.speciesArray.length == 0)
+    {
+        alert("Vous avez gagné");
+        document.location.reload();
+    }
+
     // boucler sur le tableau du joueur pour faire effet des bombes puis init le plateau du joueur
     for (var x = 0; x < world.xMax; x++) {
         for (var y = 0; y < world.yMax; y++) {
