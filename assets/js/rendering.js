@@ -55,7 +55,11 @@ function drawHoverImage(evt){
         }
         else if(selectedImageCode == FIRE)
         {
-            ctx.drawImage(image, mousePos.xCell * STEP, mousePos.yCell * STEP, STEP, STEP);
+            //feu sur 10 cases verticalement
+            for(var y = 0; y < world.yMax; y++)
+            {
+                ctx.drawImage(image, mousePos.xCell * STEP, ((mousePos.yCell + y - 4) * STEP + cvs.height) % cvs.height, STEP, STEP);
+            }
         }
         else if(selectedImageCode == ICE)
         {
@@ -128,7 +132,11 @@ function addUserAction(evt) {
                 //si l'énergie du joueur est suffisante pour poser un feu
                 if (world.player.energy >= FIRE_COST)
                 {
-                    world.player.actionBoard[mousePos.xCell][mousePos.yCell] = selectedImageCode;
+                    //feu sur 10 cases verticalement
+                    for(var y = 0; y < world.yMax; y++)
+                    {
+                        world.player.actionBoard[mousePos.xCell][(mousePos.yCell + y - 4 + world.player.actionBoard[mousePos.xCell].length) % world.player.actionBoard[mousePos.xCell].length] = selectedImageCode;
+                    }
                     //baisse de l'énergie
                     world.player.removeEnergy(FIRE_COST);
                 }
@@ -155,8 +163,6 @@ function addUserAction(evt) {
                     world.player.removeEnergy(BAIT_COST);
                 }
             }
-            /*autoplay = false;
-            toggleAutoplay();*/
         }
         drawWorld(world);
     }
@@ -196,6 +202,7 @@ function drawGrid() {
 }
 
 function drawWorld(world) {
+    var image = new Image();
     //tracé de la grille
     drawGrid();
     for (var x = 0; x < world.xMax; x++) {
@@ -205,7 +212,8 @@ function drawWorld(world) {
             if (cellValue === -1) {
                 ctx.fillStyle = 'white';
                 ctx.fillRect(x * STEP + 1, y * STEP + 1, STEP - 2, STEP - 2);
-            } else {
+            } 
+            else {
                 var color = world.speciesArray[cellValue].color;
                 ctx.fillStyle = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
                 ctx.fillRect(x * STEP + 1, y * STEP + 1, STEP - 2, STEP - 2);
@@ -330,8 +338,20 @@ function getSelectedImageCode(selectedImage) {
     if (selectedImage.src.includes("bomb")) {
         return BOMB;
     }
-    if (selectedImage.src.includes("fire")) {
+    if (selectedImage.src.includes("fire-48")) {
         return FIRE;
+    }
+    if (selectedImage.src.includes("fire2-48")) {
+        return FIRE2;
+    }
+    if (selectedImage.src.includes("fire3-48")) {
+        return FIRE3;
+    }
+    if (selectedImage.src.includes("fire4-48")) {
+        return FIRE4;
+    }
+    if (selectedImage.src.includes("fire5-48")) {
+        return FIRE5;
     }
     if (selectedImage.src.includes("ice")) {
         return ICE;
@@ -349,6 +369,18 @@ function getSelectedImageSrc(selectedImageCode) {
     }
     if (selectedImageCode === FIRE) {
         return "assets/img/fire-48.png";
+    }
+    if (selectedImageCode === FIRE2) {
+        return "assets/img/fire2-48.png";
+    }
+    if (selectedImageCode === FIRE3) {
+        return "assets/img/fire3-48.png";
+    }
+    if (selectedImageCode === FIRE4) {
+        return "assets/img/fire4-48.png";
+    }
+    if (selectedImageCode === FIRE5) {
+        return "assets/img/fire5-48.png";
     }
     if (selectedImageCode === ICE) {
         return "assets/img/ice-48.png";
