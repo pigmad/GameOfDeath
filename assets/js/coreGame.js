@@ -43,20 +43,19 @@ class Player {
         this.actionBoard = actionBoard;
     }
 
-    addEnergy(qty){
+    addEnergy(qty) {
         //si l'énergie du joueur est inférieure au maximum
-        if (this.energy + qty <= ENERGY_MAX){
+        if (this.energy + qty <= ENERGY_MAX) {
             this.energy += qty;
             setEnergy();
         }
     }
 
-    removeEnergy(qty){
-        if(this.energy - qty >= 0){
+    removeEnergy(qty) {
+        if (this.energy - qty >= 0) {
             this.energy -= qty;
             setEnergy();
         }
-        
     }
 }
 
@@ -70,10 +69,10 @@ class Species {
 
     mutateGenome() {
         var mutatedGenome = JSON.parse(JSON.stringify(this.actionsArray));
-        var mutationNumber = 2 + Math.floor(Math.random() * MAXSITUATIONS);
+        var mutationNumber = Math.floor(Math.random() * MAXSITUATIONS);
         for (var i = 0; i < mutationNumber; i++) {
             var mutatedGene = Math.floor(Math.random() * MAXSITUATIONS);
-            mutatedGenome[mutatedGene] = 1 + Math.floor(Math.random() * MAXSITUATIONS);
+            mutatedGenome[mutatedGene] = 1 + Math.floor(Math.random() * ACTIONSNUMBER);
         }
         return mutatedGenome;
     }
@@ -136,11 +135,11 @@ class World {
         //si la case est occupée par une cellule d'une autre espèce alors la cellule est détruite
         if (board[x][y] !== -1 && board[x][y] !== cellValue) {
             board[x][y] = -2;
-        } 
+        }
         //la cellule est créée aux coordonnées (x,y)
         else {
             //cas où il n'y a pas de feu
-            if(world.player.actionBoard[x][y] != FIRE2 && world.player.actionBoard[x][y] != FIRE3 && world.player.actionBoard[x][y] != FIRE4 && world.player.actionBoard[x][y] != FIRE5)
+            if (world.player.actionBoard[x][y] != FIRE2 && world.player.actionBoard[x][y] != FIRE3 && world.player.actionBoard[x][y] != FIRE4 && world.player.actionBoard[x][y] != FIRE5)
             {
                 document.getElementById("nbcellules").innerHTML = (parseInt(document.getElementById("nbcellules").innerHTML) + 1).toString();
                 board[x][y] = cellValue;
@@ -155,7 +154,7 @@ class World {
             board[x][y] = -2;
         } else {
             //cas où il n'y a pas de feu
-            if(world.player.actionBoard[x][y] != FIRE2 && world.player.actionBoard[x][y] != FIRE3 && world.player.actionBoard[x][y] != FIRE4 && world.player.actionBoard[x][y] != FIRE5)
+            if (world.player.actionBoard[x][y] != FIRE2 && world.player.actionBoard[x][y] != FIRE3 && world.player.actionBoard[x][y] != FIRE4 && world.player.actionBoard[x][y] != FIRE5)
             {
                 //cas où il n'y a pas de mutation
                 if (Math.random() > this.pMut) {
@@ -193,7 +192,7 @@ function initSpecies() {
             actionArray.push(1 + Math.floor(Math.random() * ACTIONSNUMBER));
         }
         //génération de la couleur de la cellule
-        var color = [1 + Math.floor(Math.random() * 255), 1 + Math.floor(Math.random() * 255), 1 + Math.floor(Math.random() * 255)];
+        var color = [Math.floor(Math.random() * 255), Math.floor(Math.random() * 255), Math.floor(Math.random() * 255)];
         var s = new Species(actionArray, true, color);
         species.push(s);
     }
@@ -250,7 +249,7 @@ function worldStep() {
         document.location.reload();
     }
     //cas où le joueur gagne
-    if(world.speciesArray.length == 0)
+    if (world.speciesArray.length == 0)
     {
         alert("Vous avez gagné");
         document.location.reload();
@@ -272,33 +271,26 @@ function worldStep() {
             if (world.player.actionBoard[x][y] == BOMB) {
                 //destruction de la cellule
                 world.board[x][y] = -1;
-            }
-            else if (world.player.actionBoard[x][y] == FIRE)
+            } else if (world.player.actionBoard[x][y] == FIRE)
             {
                 //destruction de la cellule
-                world.board[x][y] = -1;   
-            }
-            else if(world.player.actionBoard[x][y] == FIRE2)
+                world.board[x][y] = -1;
+            } else if (world.player.actionBoard[x][y] == FIRE2)
             {
                 world.board[x][y] = -1;
-            }
-            else if(world.player.actionBoard[x][y] == FIRE3)
+            } else if (world.player.actionBoard[x][y] == FIRE3)
             {
                 world.board[x][y] = -1;
-            }
-            else if(world.player.actionBoard[x][y] == FIRE4)
+            } else if (world.player.actionBoard[x][y] == FIRE4)
             {
                 world.board[x][y] = -1;
-            }
-            else if(world.player.actionBoard[x][y] == FIRE5)
+            } else if (world.player.actionBoard[x][y] == FIRE5)
             {
                 world.board[x][y] = -1;
-            }
-            else if (world.player.actionBoard[x][y] == ICE)
+            } else if (world.player.actionBoard[x][y] == ICE)
             {
 
-            }
-            else if (world.player.actionBoard[x][y] == BAIT)
+            } else if (world.player.actionBoard[x][y] == BAIT)
             {
 
             }
@@ -306,37 +298,33 @@ function worldStep() {
     }
 
     var actionBoard = [];
-    for(var x = 0; x < world.player.actionBoard.length; x++)
+    for (var x = 0; x < world.player.actionBoard.length; x++)
     {
         var line = [];
-        for(var y = 0; y < world.player.actionBoard[x].length; y++)
+        for (var y = 0; y < world.player.actionBoard[x].length; y++)
         {
             //cas où il y a un feu
-            if(world.player.actionBoard[x][y] == FIRE)
+            if (world.player.actionBoard[x][y] == FIRE)
             {
                 line.push(FIRE2);
-            }
-            else if(world.player.actionBoard[x][y] == FIRE2)
+            } else if (world.player.actionBoard[x][y] == FIRE2)
             {
                 line.push(FIRE3);
-            }
-            else if(world.player.actionBoard[x][y] == FIRE3)
+            } else if (world.player.actionBoard[x][y] == FIRE3)
             {
                 line.push(FIRE4);
-            }
-            else if(world.player.actionBoard[x][y] == FIRE4)
+            } else if (world.player.actionBoard[x][y] == FIRE4)
             {
                 line.push(FIRE5);
-            }
-            else
+            } else
             {
                 line.push(0);
             }
         }
         actionBoard.push(line);
     }
-    world.player.actionBoard = actionBoard;  
-    
+    world.player.actionBoard = actionBoard;
+
 
     for (var x = 0; x < world.xMax; x++) {
         for (var y = 0; y < world.yMax; y++) {
@@ -350,22 +338,22 @@ function worldStep() {
                     case NOPE :
                         world.cellActionNoMut(x, y, cellValue, emptyBoard);
                         break;
-                    //cas où la cellule se multiplie vers le nord
+                        //cas où la cellule se multiplie vers le nord
                     case NORTH :
                         world.cellActionMut(x, (y - 1 + world.yMax) % world.yMax, cellValue, emptyBoard);
                         world.cellActionMut(x, y, cellValue, emptyBoard);
                         break;
-                    //cas où la cellule se multiplie vers le sud
+                        //cas où la cellule se multiplie vers le sud
                     case SOUTH:
                         world.cellActionMut(x, (y + 1) % world.yMax, cellValue, emptyBoard);
                         world.cellActionMut(x, y, cellValue, emptyBoard);
                         break;
-                    //cas où la cellule se multiplie vers l'ouest
+                        //cas où la cellule se multiplie vers l'ouest
                     case WEST:
                         world.cellActionMut((x - 1 + world.xMax) % world.xMax, y, cellValue, emptyBoard);
                         world.cellActionMut(x, y, cellValue, emptyBoard);
                         break;
-                    //cas où la cellule se multiplie vers l'est
+                        //cas où la cellule se multiplie vers l'est
                     case EAST:
                         world.cellActionMut((x + 1) % world.xMax, y, cellValue, emptyBoard);
                         world.cellActionMut(x, y, cellValue, emptyBoard);
@@ -379,6 +367,7 @@ function worldStep() {
             var cellValue = emptyBoard[x][y];
             if (cellValue === -2) {
                 emptyBoard[x][y] = -1;
+                document.getElementById("nbcellules").innerHTML = (parseInt(document.getElementById("nbcellules").innerHTML) - 2).toString();
             }
         }
     }
