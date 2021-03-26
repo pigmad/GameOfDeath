@@ -33,7 +33,7 @@ function getMousePosition(evt) {
 }
 
 //fonction qui affiche un objet sur le plateau en fonction de la position de la souris de l'utilisateur
-function drawHoverImage(evt){
+function drawHoverImage(evt) {
     drawWorld(world);
     // si un objet (bombe, feu, ...) est sélectionné
     if (selectedImageCode) {
@@ -42,30 +42,27 @@ function drawHoverImage(evt){
         var image = new Image();
         image.src = getSelectedImageSrc(window.selectedImageCode);
         if (selectedImageCode == BOMB)
-        {   
+        {
             //bombe de rayon 10*10
-            for(var x = 0; x < 10; x++)
+            for (var x = 0; x < 10; x++)
             {
-                for(var y = 0; y < 10; y++)
+                for (var y = 0; y < 10; y++)
                 {
                     ctx.drawImage(image, ((mousePos.xCell + x - 4) * STEP + cvs.width) % cvs.width, ((mousePos.yCell + y - 4) * STEP + cvs.height) % cvs.height, STEP, STEP);
                 }
             }
-            
-        }
-        else if(selectedImageCode == FIRE)
+
+        } else if (selectedImageCode == FIRE)
         {
             //feu sur 10 cases verticalement
-            for(var y = 0; y < world.yMax; y++)
+            for (var y = 0; y < world.yMax; y++)
             {
                 ctx.drawImage(image, mousePos.xCell * STEP, ((mousePos.yCell + y - 4) * STEP + cvs.height) % cvs.height, STEP, STEP);
             }
-        }
-        else if(selectedImageCode == ICE)
+        } else if (selectedImageCode == ICE)
         {
             ctx.drawImage(image, mousePos.xCell * STEP, mousePos.yCell * STEP, STEP, STEP);
-        }
-        else if(selectedImageCode == BAIT)
+        } else if (selectedImageCode == BAIT)
         {
             ctx.drawImage(image, mousePos.xCell * STEP, mousePos.yCell * STEP, STEP, STEP);
         }
@@ -77,7 +74,7 @@ function addUserAction(evt) {
     if (selectedImageCode) {
         var mousePos = getMousePosition(evt);
         //si l'utilisateur clique sur un objet qui est déjà sur le plateau alors il disparait
-        if (world.player.actionBoard[mousePos.xCell][mousePos.yCell] === selectedImageCode && world.player.actionBoard[(mousePos.xCell + 1) % world.player.actionBoard.length][mousePos.yCell] == selectedImageCode && world.player.actionBoard[(mousePos.xCell - 1 + world.player.actionBoard.length) % world.player.actionBoard.length][mousePos.yCell] == selectedImageCode &&  world.player.actionBoard[mousePos.xCell][(mousePos.yCell + 1) % world.player.actionBoard[mousePos.xCell].length] == selectedImageCode &&  world.player.actionBoard[mousePos.xCell][(mousePos.yCell - 1 + world.player.actionBoard[mousePos.xCell].length) % world.player.actionBoard[mousePos.xCell].length] == selectedImageCode) {
+        if (world.player.actionBoard[mousePos.xCell][mousePos.yCell] === selectedImageCode && world.player.actionBoard[(mousePos.xCell + 1) % world.player.actionBoard.length][mousePos.yCell] == selectedImageCode && world.player.actionBoard[(mousePos.xCell - 1 + world.player.actionBoard.length) % world.player.actionBoard.length][mousePos.yCell] == selectedImageCode && world.player.actionBoard[mousePos.xCell][(mousePos.yCell + 1) % world.player.actionBoard[mousePos.xCell].length] == selectedImageCode && world.player.actionBoard[mousePos.xCell][(mousePos.yCell - 1 + world.player.actionBoard[mousePos.xCell].length) % world.player.actionBoard[mousePos.xCell].length] == selectedImageCode) {
             world.player.actionBoard[mousePos.xCell][mousePos.yCell] = 0;
             //augmentation de l'énergie: cas bombe
             if (selectedImageCode == BOMB)
@@ -92,19 +89,16 @@ function addUserAction(evt) {
             //cas feu
             else if (selectedImageCode == FIRE)
             {
-                world.player.energy = world.player.energy + FIRE_COST;
                 world.player.addEnergy(FIRE_COST);
             }
             //cas glace
             else if (selectedImageCode == ICE)
             {
-                world.player.energy = world.player.energy + ICE_COST;
                 world.player.addEnergy(ICE_COST);
             }
             //cas appat
             else if (selectedImageCode == BAIT)
             {
-                world.player.energy = world.player.energy + BAIT_COST;
                 world.player.addEnergy(BAIT_COST);
             }
         } else {
@@ -115,9 +109,9 @@ function addUserAction(evt) {
                 if (world.player.energy >= BOMB_COST)
                 {
                     //bombe de rayon 10*10
-                    for(var x = 0; x < 10; x++)
+                    for (var x = 0; x < 10; x++)
                     {
-                        for(var y = 0; y < 10; y++)
+                        for (var y = 0; y < 10; y++)
                         {
                             world.player.actionBoard[(mousePos.xCell + x - 4 + world.player.actionBoard.length) % world.player.actionBoard.length][(mousePos.yCell + y - 4 + world.player.actionBoard[mousePos.xCell].length) % world.player.actionBoard[mousePos.xCell].length] = selectedImageCode;
                         }
@@ -133,7 +127,7 @@ function addUserAction(evt) {
                 if (world.player.energy >= FIRE_COST)
                 {
                     //feu sur 10 cases verticalement
-                    for(var y = 0; y < world.yMax; y++)
+                    for (var y = 0; y < world.yMax; y++)
                     {
                         world.player.actionBoard[mousePos.xCell][(mousePos.yCell + y - 4 + world.player.actionBoard[mousePos.xCell].length) % world.player.actionBoard[mousePos.xCell].length] = selectedImageCode;
                     }
@@ -168,18 +162,6 @@ function addUserAction(evt) {
     }
 }
 
-//fonction qui dessine les objets (bombe, feu, ...) dans le plateau
-function drawUserActions() {
-    drawWorld(world);
-    for (var x = 0; x < world.xMax; x++) {
-        for (var y = 0; y < world.yMax; y++) {
-            var image = new Image();
-            image.src = getSelectedImageSrc(world.player.actionBoard[x][y]);
-            ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
-        }
-    }
-}
-
 function drawGrid() {
     ctx.beginPath();
     var w = cvs.width;
@@ -202,25 +184,26 @@ function drawGrid() {
 }
 
 function drawWorld(world) {
-    var image = new Image();
     //tracé de la grille
     drawGrid();
     for (var x = 0; x < world.xMax; x++) {
         for (var y = 0; y < world.yMax; y++) {
             var cellValue = world.board[x][y];
+            var userActionValue = world.player.actionBoard[x][y];
             //si pas de cellule, colorer la case en blanc
             if (cellValue === -1) {
                 ctx.fillStyle = 'white';
                 ctx.fillRect(x * STEP + 1, y * STEP + 1, STEP - 2, STEP - 2);
-            } 
-            else {
+            } else {
                 var color = world.speciesArray[cellValue].color;
                 ctx.fillStyle = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
                 ctx.fillRect(x * STEP + 1, y * STEP + 1, STEP - 2, STEP - 2);
             }
-            var image = new Image();
-            image.src = getSelectedImageSrc(world.player.actionBoard[x][y]);
-            ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
+            if (userActionValue !== 0) {
+                var image = new Image();
+                image.src = getSelectedImageSrc(userActionValue);
+                ctx.drawImage(image, x * STEP, y * STEP, STEP, STEP);
+            }
         }
     }
 }
@@ -239,10 +222,10 @@ function setDropDownAliveSpecies(world) {
 }
 
 //fonction qui affiche l'énergie du joueur dans la barre de navigation
-function setEnergy(){
+function setEnergy() {
     document.getElementById("value").innerHTML = world.player.energy.toString();
     window.barre.setAttribute("aria-valuenow", world.player.energy.toString());
-    window.barre.setAttribute("style", "width: " + (world.player.energy/window.barre.getAttribute("aria-valuemax"))*100 + "%");
+    window.barre.setAttribute("style", "width: " + (world.player.energy / window.barre.getAttribute("aria-valuemax")) * 100 + "%");
 }
 
 //fonction qui enlève les bordures d'une image
@@ -263,11 +246,11 @@ function resetImagesBorder() {
 //fonction qui efectue les actions sur les images des objets (bombe, feu, glace, appat) de la navbar
 function selectImage(selectedImage) {
     var selectedImageCode = getSelectedImageCode(selectedImage);
-    if (window.selectedImageCode == selectedImageCode){
+    if (window.selectedImageCode == selectedImageCode) {
         resetImagesBorder();
     }
     //cas où l'utilisateur clique sur une image (cela ajoute un cadre autour)
-    else{
+    else {
         //cas où il clique sur une bombe
         if (selectedImageCode == BOMB)
         {
@@ -283,8 +266,7 @@ function selectImage(selectedImage) {
                     toggleAutoplay();
                 }
             }
-        }
-        else if (selectedImageCode == FIRE)
+        } else if (selectedImageCode == FIRE)
         {
             // si son énergie est supérieure au cout du feu
             if (world.player.energy >= FIRE_COST)
@@ -298,8 +280,7 @@ function selectImage(selectedImage) {
                     toggleAutoplay();
                 }
             }
-        }
-        else if (selectedImageCode == ICE)
+        } else if (selectedImageCode == ICE)
         {
             // si son énergie est supérieure au cout de la glace
             if (world.player.energy >= ICE_COST)
@@ -313,8 +294,7 @@ function selectImage(selectedImage) {
                     toggleAutoplay();
                 }
             }
-        }
-        else if (selectedImageCode == BAIT)
+        } else if (selectedImageCode == BAIT)
         {
             // si son énergie est supérieure au cout de l'appat
             if (world.player.energy >= BAIT_COST)
@@ -329,7 +309,7 @@ function selectImage(selectedImage) {
                 }
             }
         }
-        
+
     }
 }
 

@@ -6,6 +6,8 @@ SPECIESNUMBER = 3;
 MAXSITUATIONS = 81;
 //nombre maximum d'actions qu'une cellule peut faire, les codes associés sont définis ci-dessous
 ACTIONSNUMBER = 5;
+//Nombre de cellules maximum avant fin de la partie
+ENDGAME_CELL_NUMBER = 500000;
 
 //CELLS ACTION CODES
 NOPE = 1; //rien
@@ -26,10 +28,11 @@ BAIT = -6;
 
 //énergie maximale
 ENERGY_MAX = 500;
+ENERGY_PER_CYCLE = 100;
 
 //cout en énergie d'une bombe
-BOMB_COST = 100;
-FIRE_COST = 200;
+BOMB_COST = 200;
+FIRE_COST = 100;
 ICE_COST = 200;
 BAIT_COST = 200;
 
@@ -125,9 +128,10 @@ class World {
         neigh.push(encodeSituation(selectedSpecies, board[x][(y - 1 + world.yMax) % world.yMax]));
         //calcul de la situation au sud de la case considérée
         neigh.push(encodeSituation(selectedSpecies, board[x][(y + 1) % world.yMax]));
-        return 1 + neigh[0] + 3 * neigh[1] + 9 * neigh[2] + 27 * neigh[3];
+        return neigh[0] + 3 * neigh[1] + 9 * neigh[2] + 27 * neigh[3];
     }
 
+    //ajout d'une cellule cellValue aux coordonnées (x,y) sans mutation
     cellActionNoMut(x, y, cellValue, board) {
         //si la case est occupée par une cellule d'une autre espèce alors la cellule est détruite
         if (board[x][y] !== -1 && board[x][y] !== cellValue) {
@@ -144,7 +148,7 @@ class World {
         }
     }
 
-    //ajout d'une cellule cellValue aux coordonnées (x,y)
+    //ajout d'une cellule cellValue aux coordonnées (x,y) avec mutation
     cellActionMut(x, y, cellValue, board) {
         //s'il y a déjà une cellule d'une autre espèce alors la cellule est détruite
         if (board[x][y] !== -1 && board[x][y] !== cellValue) {
@@ -238,9 +242,9 @@ function initWorld() {
 
 function worldStep() {
     world.cycle++;
-    world.player.addEnergy(BOMB_COST);
+    world.player.addEnergy(ENERGY_PER_CYCLE);
     // cas où le joueur perd
-    if (document.getElementById("nbcellules").innerHTML > 100000)
+    if (document.getElementById("nbcellules").innerHTML > ENDGAME_CELL_NUMBER)
     {
         alert("Vous avez perdu");
         document.location.reload();
@@ -370,8 +374,6 @@ function worldStep() {
             }
         }
     }
-
-    var image = new Image();
     for (var x = 0; x < world.xMax; x++) {
         for (var y = 0; y < world.yMax; y++) {
             var cellValue = emptyBoard[x][y];
@@ -384,7 +386,7 @@ function worldStep() {
     world.board = emptyBoard;
     checkAliveSpecies();
     deleteDeadSpecies();
-    drawUserActions();
+    drawWorld(world);
     setDropDownAliveSpecies(world);
 }
 
