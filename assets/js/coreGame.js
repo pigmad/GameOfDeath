@@ -141,7 +141,6 @@ class World {
             //cas où il n'y a pas de feu
             if (world.player.actionBoard[x][y] != FIRE2 && world.player.actionBoard[x][y] != FIRE3 && world.player.actionBoard[x][y] != FIRE4 && world.player.actionBoard[x][y] != FIRE5)
             {
-                document.getElementById("nbcellules").innerHTML = (parseInt(document.getElementById("nbcellules").innerHTML) + 1).toString();
                 board[x][y] = cellValue;
             }
         }
@@ -171,7 +170,7 @@ class World {
                     var mutatedCell = new Species(mutatedActionArray, true, mutatedColor);
                     this.speciesArray.push(mutatedCell);
                     //création de cellules (ajout dans le tableau des cellules) de l'espèce mutée aux coordonnées (x,y) ainsi qu'aux 4 cases (nord, sud, est, ouest) adjacentes
-                    document.getElementById("nbcellules").innerHTML = (parseInt(document.getElementById("nbcellules").innerHTML) + 5).toString();
+                    document.getElementById("nbcellules").innerHTML = (parseInt(document.getElementById("nbcellules").innerHTML) + 1).toString();
                     board[x][y] = this.speciesArray.length - 1;
                     board[(x - 1 + world.xMax) % world.xMax][y] = this.speciesArray.length - 1;
                     board[(x + 1) % world.xMax][y] = this.speciesArray.length - 1;
